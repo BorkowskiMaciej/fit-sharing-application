@@ -20,7 +20,7 @@ const SearchBar: React.FC = () => {
         <div className="search-bar-container">
             <input
                 type="text"
-                placeholder="Enter UUID"
+                placeholder="Search..."
                 value={input}
                 onChange={handleInputChange}
                 className="search-input"

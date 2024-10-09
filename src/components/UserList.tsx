@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { User } from '../types';
+import UserCard from "./UserCard";
 
 const UserList = () => {
     const { query } = useParams();
     const [users, setUsers] = useState<User[]>([]);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -29,12 +29,7 @@ const UserList = () => {
                 <p>No users found.</p>
             ) : (
                 users.map(user => (
-                    <div key={user.username} onClick={() => navigate(`/user/${user.fsUserId}`)}>
-                        <h2>{user.username}</h2>
-                        <p>{`${user.firstName} ${user.lastName}`}</p>
-                        <p>Wiek: {user.age}</p>
-                        <p>Opis: {user.description}</p>
-                    </div>
+                    <UserCard key={user.username} user={user} />
                 ))
             )}
         </div>
