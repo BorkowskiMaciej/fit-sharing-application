@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const SearchBar: React.FC = () => {
-    const [uuid, setUuid] = useState<string>('');
+    const [input, setInput] = useState('');
     const navigate = useNavigate();
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setUuid(event.target.value);
+        setInput(event.target.value);
     };
 
     const handleSearch = () => {
-        if (uuid) {
-            navigate(`/user/${uuid}`);
-            setUuid('');
+        if (input) {
+            navigate(`/search/${input}`);
+            setInput('');
         }
     };
 
@@ -21,7 +21,7 @@ const SearchBar: React.FC = () => {
             <input
                 type="text"
                 placeholder="Enter UUID"
-                value={uuid}
+                value={input}
                 onChange={handleInputChange}
                 className="search-input"
             />

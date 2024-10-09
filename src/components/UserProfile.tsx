@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-
-interface User {
-    username: string;
-    firstName: string;
-    lastName: string;
-    age: number;
-    description: string;
-}
+import {User} from "../types";
 
 const UserProfile: React.FC = () => {
     const { uuid } = useParams<{ uuid: string }>();

@@ -11,8 +11,8 @@ const App: React.FC = () => {
     <Router>
         <Navbar />
         <Routes>
-            <Route path="/" element={<UserList />} />
             <Route path="/user/:uuid" element={<UserProfile />} />
+            <Route path="/search/:query" element={<UserList />} />
         </Routes>
     </Router>
     );
