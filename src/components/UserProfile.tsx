@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../axiosConfig';
 import {User} from "../types";
 
 const UserProfile: React.FC = () => {
@@ -11,7 +11,7 @@ const UserProfile: React.FC = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/users/${uuid}`);
+                const response = await axiosInstance.get(`/users/${uuid}`);
                 setUser(response.data);
                 setError(null);
             } catch (err) {

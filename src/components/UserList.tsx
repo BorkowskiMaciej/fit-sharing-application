@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../axiosConfig';
 import { useParams } from 'react-router-dom';
 import { User } from '../types';
 import UserCard from "./UserCard";
@@ -11,8 +11,7 @@ const UserList = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const url = `http://localhost:8080/users/search?searchTerm=${query}`;
-                const response = await axios.get(url);
+                const response = await axiosInstance.get(`/users/search?searchTerm=${query}`);
                 setUsers(response.data);
             } catch (error) {
                 console.error('Error fetching users', error);
