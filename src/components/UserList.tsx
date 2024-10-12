@@ -23,12 +23,16 @@ const UserList = () => {
 
     return (
         <div>
-            <h1>{query ? `Search Results for "${query}"` : "User List"}</h1>
             {users.length === 0 ? (
                 <p>No users found.</p>
             ) : (
                 users.map(user => (
-                    <UserCard key={user.username} user={user} />
+                    <UserCard key={user.username}
+                              username={user.username}
+                              firstName={user.firstName}
+                              lastName={user.lastName}
+                              fsUserId={user.fsUserId}
+                    />
                 ))
             )}
         </div>

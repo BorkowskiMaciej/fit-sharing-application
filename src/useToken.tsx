@@ -1,18 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type UserToken = {
+    fsUserId: string;
     token: string;
     expiresIn: number;
 };
 
 export default function useToken() {
-    const getToken = () => {
+    const [tokenData, setTokenData] = useState<UserToken | null>(null);
+
+    useEffect(() => {
         const tokenString = sessionStorage.getItem('token');
         const userToken: UserToken | null = tokenString ? JSON.parse(tokenString) : null;
-        return userToken;
-    };
-
-    const [tokenData, setTokenData] = useState<UserToken | null>(getToken());
+        setTokenData(userToken);
+    }, []);
 
     const saveToken = (userToken: UserToken) => {
         sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -21,7 +22,6 @@ export default function useToken() {
 
     return {
         setTokenData: saveToken,
-        token: tokenData?.token,
-        tokenData
+        tokenData,
     };
 }

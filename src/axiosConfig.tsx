@@ -9,8 +9,9 @@ axiosInstance.interceptors.request.use(
         const tokenString = sessionStorage.getItem('token');
         const tokenData = tokenString ? JSON.parse(tokenString) : null;
 
-        if (tokenData && tokenData.token) {
+        if (tokenData) {
             config.headers['Authorization'] = `Bearer ${tokenData.token}`;
+            config.headers['fs-user-id'] = tokenData.fsUserId;
         }
         return config;
     },
