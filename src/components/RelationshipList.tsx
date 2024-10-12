@@ -13,7 +13,7 @@ const RelationshipList = () => {
     useEffect(() => {
         const fetchAcceptedRelationships = async () => {
             try {
-                const response = await axiosInstance.get(`/relationships`);
+                const response = await axiosInstance.get(`/relationships/accepted`);
                 setAcceptedRelationships(response.data);
             } catch (error) {
                 console.error('Error fetching users', error);
@@ -45,10 +45,11 @@ const RelationshipList = () => {
 
     return (
         <div>
-            {acceptedRelationships.length === 0 ? (
+            <h3>Received invitations</h3>
+            {receivedRelationships.length === 0 ? (
                 <p>No users found.</p>
             ) : (
-                acceptedRelationships.map(response => (
+                receivedRelationships.map(response => (
                     <UserCard key={response.friendUsername}
                               username={response.friendUsername}
                               firstName={response.friendFirstName}
@@ -57,6 +58,7 @@ const RelationshipList = () => {
                     />
                 ))
             )}
+            <h3>Sent invitations</h3>
             {sentRelationships.length === 0 ? (
                 <p>No users found.</p>
             ) : (
@@ -69,10 +71,11 @@ const RelationshipList = () => {
                     />
                 ))
             )}
-            {receivedRelationships.length === 0 ? (
+            <h3>Friends</h3>
+            {acceptedRelationships.length === 0 ? (
                 <p>No users found.</p>
             ) : (
-                receivedRelationships.map(response => (
+                acceptedRelationships.map(response => (
                     <UserCard key={response.friendUsername}
                               username={response.friendUsername}
                               firstName={response.friendFirstName}
