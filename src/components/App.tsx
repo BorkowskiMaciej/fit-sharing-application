@@ -1,13 +1,14 @@
 import React from 'react';
 import '../styles.css';
 import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom';
-import UserProfile from "./UserProfile";
+import UserProfile from "./user/UserProfile";
 import NavBar from "./navigation/NavBar";
-import UserList from "./UserList";
+import UserList from "./user/UserList";
 import Login from "./authentication/Login";
 import useToken from "../useToken";
 import Register from "./authentication/Register";
 import RelationshipList from "./RelationshipList";
+import NewsList from "./news/NewsList";
 
 const App: React.FC = () => {
     const { tokenData, setTokenData } = useToken();
@@ -31,6 +32,7 @@ const App: React.FC = () => {
                 <Route path="/user/:uuid" element={<UserProfile />} />
                 <Route path="/search/:query" element={<UserList />} />
                 <Route path="/friends" element={<RelationshipList />} />
+                <Route path="*" element={<NewsList />} />
             </Routes>
         </Router>
     );

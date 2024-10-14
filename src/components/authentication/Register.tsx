@@ -127,109 +127,108 @@ export default function Register() {
     };
 
     return (
-        <div className="form-wrapper">
-            <h1>Register form</h1>
-            {message && <div className="alert alert-danger">{message}</div>}
-            <form onSubmit={handleSubmit}>
-                <label>
-                    <p>Username</p>
-                    <input
-                        type="text"
-                        required
-                        onChange={e => setUserName(e.target.value)}
-                        style={{
-                            border: usernameError ? '2px solid red' : '1px solid #ccc'
-                        }}
-                    />
-                    {usernameError && <div className="alert alert-danger">{usernameError}</div>}
-                </label>
-                <label>
-                    <p>Password</p>
-                    <input
-                        type="password"
-                        required
-                        onChange={e => setPassword(e.target.value)}
-                        style={{
-                            border: passwordError ? '2px solid red' : '1px solid #ccc'
-                        }}
-                    />
-                    {passwordError && <div className="alert alert-danger">{passwordError}</div>}
-                </label>
-                <label>
-                    <p>Confirm password</p>
-                    <input
-                        type="password"
-                        required
-                        onChange={e => setConfirmPassword(e.target.value)}
-                        style={{
-                            border: confirmPasswordError ? '2px solid red' : '1px solid #ccc'
-                        }}
-                    />
-                    {confirmPasswordError && <div className="alert alert-danger">{confirmPasswordError}</div>}
-                </label>
-                <label>
-                    <p>Email</p>
-                    <input
-                        type="text"
-                        required
-                        onChange={e => setEmail(e.target.value)}
-                        style={{
-                            border: emailError ? '2px solid red' : '1px solid #ccc'
-                        }}
-                    />
-                    {emailError && <div className="alert alert-danger">{emailError}</div>}
-                </label>
-                <label>
-                    <p>First Name</p>
-                    <input
-                        type="text"
-                        required
-                        onChange={e => setFirstName(e.target.value)}
-                        style={{
-                            border: firstNameError ? '2px solid red' : '1px solid #ccc'
-                        }}
-                    />
-                    {firstNameError && <div className="alert alert-danger">{firstNameError}</div>}
-                </label>
-                <label>
-                    <p>Last Name</p>
-                    <input
-                        type="text"
-                        required
-                        onChange={e => setLastName(e.target.value)}
-                        style={{
-                            border: lastNameError ? '2px solid red' : '1px solid #ccc'
-                        }}
-                    />
-                    {lastNameError && <div className="alert alert-danger">{lastNameError}</div>}
-                </label>
-                <label>
-                    <p>Age</p>
-                    <input
-                        type="number"
-                        min="1"
-                        max="100"
-                        required
-                        onChange={e => setAge(parseInt(e.target.value, 10))}
-                    />
-                </label>
-                <label>
-                    <p>Description</p>
-                    <textarea
-                        onChange={e => setDescription(e.target.value)}
-                        style={{
-                            border: descriptionError ? '2px solid red' : '1px solid #ccc'
-                        }}
-                    />
-                    {descriptionError && <div className="alert alert-danger">{descriptionError}</div>}
-                </label>
-                <div>
-                    <button type="submit">Register</button>
+        <>
+            <div className="navbar">
+                <div className="navbar-section">
+                    <h2 className="navbar-title">Fit Sharing</h2>
                 </div>
-            </form>
-            <div>
-                <Link to="/login">Already have an account?</Link>
             </div>
-        </div>
+            <div className="form-wrapper">
+                <h1>Register form</h1>
+                {message && <div className="alert alert-danger">{message}</div>}
+                <form onSubmit={handleSubmit}>
+                    <label>
+                        <p>Username</p>
+                        <input
+                            type="text"
+                            required
+                            onChange={e => setUserName(e.target.value)}
+                            style={{
+                                border: usernameError ? '2px solid red' : '1px solid #ccc'
+                            }}/>
+                        {usernameError && <div className="alert alert-danger">{usernameError}</div>}
+                    </label>
+                    <label>
+                        <p>Password</p>
+                        <input
+                            type="password"
+                            required
+                            onChange={e => setPassword(e.target.value)}
+                            style={{
+                                border: passwordError ? '2px solid red' : '1px solid #ccc'
+                            }}/>
+                        {passwordError && <div className="alert alert-danger">{passwordError}</div>}
+                    </label>
+                    <label>
+                        <p>Confirm password</p>
+                        <input
+                            type="password"
+                            required
+                            onChange={e => setConfirmPassword(e.target.value)}
+                            style={{
+                                border: confirmPasswordError ? '2px solid red' : '1px solid #ccc'
+                            }}/>
+                        {confirmPasswordError && <div className="alert alert-danger">{confirmPasswordError}</div>}
+                    </label>
+                    <label>
+                        <p>Email</p>
+                        <input
+                            type="text"
+                            required
+                            onChange={e => setEmail(e.target.value)}
+                            style={{
+                                border: emailError ? '2px solid red' : '1px solid #ccc'
+                            }}/>
+                        {emailError && <div className="alert alert-danger">{emailError}</div>}
+                    </label>
+                    <label>
+                        <p>First Name</p>
+                        <input
+                            type="text"
+                            required
+                            onChange={e => setFirstName(e.target.value)}
+                            style={{
+                                border: firstNameError ? '2px solid red' : '1px solid #ccc'
+                            }}/>
+                        {firstNameError && <div className="alert alert-danger">{firstNameError}</div>}
+                    </label>
+                    <label>
+                        <p>Last Name</p>
+                        <input
+                            type="text"
+                            required
+                            onChange={e => setLastName(e.target.value)}
+                            style={{
+                                border: lastNameError ? '2px solid red' : '1px solid #ccc'
+                            }}/>
+                        {lastNameError && <div className="alert alert-danger">{lastNameError}</div>}
+                    </label>
+                    <label>
+                        <p>Age</p>
+                        <input
+                            type="number"
+                            min="1"
+                            max="100"
+                            required
+                            onChange={e => setAge(parseInt(e.target.value, 10))}/>
+                    </label>
+                    <label>
+                        <p>Description</p>
+                        <textarea
+                            onChange={e => setDescription(e.target.value)}
+                            style={{
+                                border: descriptionError ? '2px solid red' : '1px solid #ccc'
+                            }}/>
+                        {descriptionError && <div className="alert alert-danger">{descriptionError}</div>}
+                    </label>
+                    <div>
+                        <button type="submit">Register</button>
+                    </div>
+                </form>
+                <div>
+                    <Link to="/login">Already have an account?</Link>
+                </div>
+            </div>
+        </>
     );
 }

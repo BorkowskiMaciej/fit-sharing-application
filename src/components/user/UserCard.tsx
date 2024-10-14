@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../axiosConfig";
-import useToken from "../useToken";
+import axiosInstance from "../../axiosConfig";
+import useToken from "../../useToken";
 
 interface UserCardProps {
     username: string,
@@ -92,10 +92,10 @@ const UserCard: React.FC<UserCardProps> = ({ username, firstName, lastName, fsUs
 
     return (
         <div className="user-card-container">
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-                <img src={staticPhotoUrl} alt="User Photo" className="user-mini-photo" onClick={() => navigate(`/user/${fsUserId}`)}/>
+            <div style={{ display: 'flex', alignItems: 'center' }} onClick={() => navigate(`/user/${fsUserId}`)}>
+                <img src={staticPhotoUrl} alt="User Photo" className="user-mini-photo"/>
                 <div className="user-mini-info">
-                    <h2>{username}</h2>
+                    <h2 style={{ textAlign: 'left'}}>{username}</h2>
                     <p>{firstName} {lastName}</p>
                 </div>
             </div>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axiosInstance from '../axiosConfig';
-import {User} from "../types";
+import axiosInstance from '../../axiosConfig';
+import {User} from "../../types";
+import NewsComponent from "../news/NewsComponent";
 
 const UserProfile: React.FC = () => {
     const { uuid } = useParams<{ uuid: string }>();
@@ -36,6 +37,7 @@ const UserProfile: React.FC = () => {
     const staticPhotoUrl = '/user-photo.jpg';
 
     return (
+
         <div className="user-search-container">
             <div className="user-profile-container">
                 <div className="user-info">
@@ -46,8 +48,8 @@ const UserProfile: React.FC = () => {
                     <p>Opis: {user.description}</p>
                 </div>
             </div>
+            <NewsComponent />
         </div>
-
     );
 };
 

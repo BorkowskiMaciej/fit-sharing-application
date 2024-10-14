@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axiosInstance from '../axiosConfig';
+import axiosInstance from '../../axiosConfig';
 import { useParams } from 'react-router-dom';
-import { User } from '../types';
+import { User } from '../../types';
 import UserCard from "./UserCard";
 
 const UserList = () => {
@@ -22,9 +22,9 @@ const UserList = () => {
     }, [query]);
 
     return (
-        <div>
+        <div className="user-list-container">
             {users.length === 0 ? (
-                <p>No users found.</p>
+                <p>No users found. Change the search query.</p>
             ) : (
                 users.map(user => (
                     <UserCard key={user.username}

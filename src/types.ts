@@ -16,3 +16,16 @@ export interface RelationshipResponse {
     status: string;
 }
 
+export interface News {
+    id: string;
+    publisherFsUserId: string;
+    receiverFsUserId: string;
+    data: string;
+    createdAt: string;
+}
+
+export interface CreateNewsRequest {
+    receiverFsUserId: string;
+    data: string;
+}
+

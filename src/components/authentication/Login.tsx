@@ -63,33 +63,40 @@ export default function Login({ setToken }: LoginProps) {
     };
 
     return (
-        <div className="form-wrapper">
-            <h1>Login form</h1>
-            {message && <div className="alert alert-success" role="alert">{message}</div>}
-            {errorMessage && <div className="alert alert-danger" role="alert">{errorMessage}</div>}
-            <form onSubmit={handleSubmit}>
-                <label>
-                    <p>Username</p>
-                    <input
-                        type="text"
-                        onChange={e => setUserName(e.target.value)}
-                    />
-                </label>
-                <label>
-                    <p>Password</p>
-                    <input
-                        type="password"
-                        onChange={e => setPassword(e.target.value)}
-                    />
-                </label>
-                <div>
-                    <button type="submit">Log in</button>
+        <>
+            <div className="navbar">
+                <div className="navbar-section">
+                    <h2 className="navbar-title">Fit Sharing</h2>
                 </div>
-            </form>
-            <div>
-                <Link to="/register">Need an account?</Link>
             </div>
-        </div>
+            <div className="form-wrapper">
+                <h1>Login form</h1>
+                {message && <div className="alert alert-success" role="alert">{message}</div>}
+                {errorMessage && <div className="alert alert-danger" role="alert">{errorMessage}</div>}
+                <form onSubmit={handleSubmit}>
+                    <label>
+                        <p>Username</p>
+                        <input
+                            type="text"
+                            onChange={e => setUserName(e.target.value)}
+                        />
+                    </label>
+                    <label>
+                        <p>Password</p>
+                        <input
+                            type="password"
+                            onChange={e => setPassword(e.target.value)}
+                        />
+                    </label>
+                    <div>
+                        <button type="submit">Log in</button>
+                    </div>
+                </form>
+                <div>
+                    <Link to="/register">Need an account?</Link>
+                </div>
+            </div>
+        </>
     );
 }
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axiosInstance from '../axiosConfig';
 import { useParams } from 'react-router-dom';
 import { RelationshipResponse } from '../types';
-import UserCard from "./UserCard";
+import UserCard from "./user/UserCard";
 
 const RelationshipList = () => {
     const { query } = useParams();
@@ -44,45 +44,58 @@ const RelationshipList = () => {
     }, [query]);
 
     return (
-        <div>
-            <h3>Received invitations</h3>
-            {receivedRelationships.length === 0 ? (
-                <p>No users found.</p>
+        <div className="user-list-container">
+            {receivedRelationships.length === 0 && sentRelationships.length === 0 && acceptedRelationships.length === 0 ? (
+                <p>No relationships found. Send new invitations!</p>
             ) : (
-                receivedRelationships.map(response => (
-                    <UserCard key={response.friendUsername}
-                              username={response.friendUsername}
-                              firstName={response.friendFirstName}
-                              lastName={response.friendLastName}
-                              fsUserId={response.friendFsUserId}
-                    />
-                ))
-            )}
-            <h3>Sent invitations</h3>
-            {sentRelationships.length === 0 ? (
-                <p>No users found.</p>
-            ) : (
-                sentRelationships.map(response => (
-                    <UserCard key={response.friendUsername}
-                              username={response.friendUsername}
-                              firstName={response.friendFirstName}
-                              lastName={response.friendLastName}
-                              fsUserId={response.friendFsUserId}
-                    />
-                ))
-            )}
-            <h3>Friends</h3>
-            {acceptedRelationships.length === 0 ? (
-                <p>No users found.</p>
-            ) : (
-                acceptedRelationships.map(response => (
-                    <UserCard key={response.friendUsername}
-                              username={response.friendUsername}
-                              firstName={response.friendFirstName}
-                              lastName={response.friendLastName}
-                              fsUserId={response.friendFsUserId}
-                    />
-                ))
+                <div>
+                    {receivedRelationships.length === 0 ? (
+                        <p></p>
+                    ) : (
+                        <div>
+                            <h3>Received invitations</h3>
+                            {receivedRelationships.map(response => (
+                                <UserCard key={response.friendUsername}
+                                          username={response.friendUsername}
+                                          firstName={response.friendFirstName}
+                                          lastName={response.friendLastName}
+                                          fsUserId={response.friendFsUserId}
+                                />
+                            ))}
+                        </div>
+
+                    )}
+                    {sentRelationships.length === 0 ? (
+                        <p></p>
+                    ) : (<div>
+                            <h3>Sent invitations</h3>
+                            {sentRelationships.map(response => (
+                                <UserCard key={response.friendUsername}
+                                          username={response.friendUsername}
+                                          firstName={response.friendFirstName}
+                                          lastName={response.friendLastName}
+                                          fsUserId={response.friendFsUserId}
+                                />
+                            ))}
+                        </div>
+
+                    )}
+                    {acceptedRelationships.length === 0 ? (
+                        <p></p>
+                    ) : (
+                        <div>
+                            <h3>Friends</h3>
+                            {acceptedRelationships.map(response => (
+                                <UserCard key={response.friendUsername}
+                                          username={response.friendUsername}
+                                          firstName={response.friendFirstName}
+                                          lastName={response.friendLastName}
+                                          fsUserId={response.friendFsUserId}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
             )}
         </div>
     );
