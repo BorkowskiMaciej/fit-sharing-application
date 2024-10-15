@@ -1,35 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { News } from '../../types';
-import { getAllReceivedNews } from '../../services/NewsService';
 import NewsCard from './NewsCard';
+import axiosInstance from "../../axiosConfig";
 
-const NewsList: React.FC = () => {
+interface FriendsNewsListProps {
+    friendFsUserId: string;
+}
+
+const FriendsNewsList: React.FC<FriendsNewsListProps> = ({friendFsUserId}) => {
     const [newsList, setNewsList] = useState<News[]>([]);
 
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const receivedNews = await getAllReceivedNews();
-                setNewsList(receivedNews);
+                const response = await axiosInstance.get(`/news/received/${friendFsUserId}`);
+                setNewsList(response.data);
             } catch (error) {
                 console.error('Failed to fetch news:', error);
             }
         };
 
         fetchNews();
-    });
+    }, [friendFsUserId]);
 
     return (
-        <div className="user-list-container">
+        <div className="news-list">
             {newsList.length === 0 ? (
-                <p>No news found. Send new invitations!</p>
+                <p>To see this user's posts you must be friends!</p>
             ) : (
                 newsList.map(news => (
-                    <NewsCard key={news.id} news={news} />
+                    <NewsCard key={news.id} news={news} onDelete={() => null}/>
                 ))
             )}
         </div>
     );
 };
 
-export default NewsList;
+export default FriendsNewsList;

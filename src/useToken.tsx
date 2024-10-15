@@ -1,10 +1,5 @@
 import { useState, useEffect } from 'react';
-
-type UserToken = {
-    fsUserId: string;
-    token: string;
-    expiresIn: number;
-};
+import {UserToken} from "./types";
 
 export default function useToken() {
     const [tokenData, setTokenData] = useState<UserToken | null>(null);
@@ -15,9 +10,14 @@ export default function useToken() {
         setTokenData(userToken);
     }, []);
 
-    const saveToken = (userToken: UserToken) => {
-        sessionStorage.setItem('token', JSON.stringify(userToken));
-        setTokenData(userToken);
+    const saveToken = (userToken: UserToken | null) => {
+        if (userToken) {
+            sessionStorage.setItem('token', JSON.stringify(userToken));
+            setTokenData(userToken);
+        } else {
+            sessionStorage.removeItem('token');
+            setTokenData(null);
+        }
     };
 
     return {

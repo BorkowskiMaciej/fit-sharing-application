@@ -2,15 +2,19 @@ import React from 'react';
 import SearchBar from './SearchBar';
 import {useNavigate} from "react-router-dom";
 import GlobalMessages from "./GlobalMessage";
+import {UserToken} from "../../types";
 
-const Navbar: React.FC = () => {
+const NavBar: React.FC<{ setTokenData: (token: UserToken | null) => void }> = ({ setTokenData }) => {
 
     const navigate = useNavigate();
 
+    const handleLogout = () => {
+        setTokenData(null);
+    };
+
     return (
-        <div className="navbar">
+        <>
             <div className="navbar-section">
-                <h2 className="navbar-title">Fit Sharing</h2>
                 <div className="icon-container" onClick={() => navigate("/")}>
                     <svg className="w-6 h-6 text-gray-800 dark:text-white navbar-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5"/>
@@ -27,15 +31,21 @@ const Navbar: React.FC = () => {
                     </svg>
                     <span>Friends</span>
                 </div>
-                <div className="icon-container" onClick={() => navigate("/user/me")}>
+                <div className="icon-container" onClick={() => navigate("/me")}>
                     <svg className="w-6 h-6 text-gray-800 dark:text-white navbar-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" strokeWidth="2" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
                     </svg>
                     <span>My profile</span>
                 </div>
+                <div className="icon-container" onClick={handleLogout}>
+                    <svg className="w-[24px] h-[24px] text-gray-800 dark:text-white navbar-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"/>
+                    </svg>
+                    <span>Logout</span>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
-export default Navbar;
+export default NavBar;

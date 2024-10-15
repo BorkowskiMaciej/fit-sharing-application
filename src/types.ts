@@ -29,3 +29,8 @@ export interface CreateNewsRequest {
     data: string;
 }
 
+export interface UserToken {
+    fsUserId: string;
+    token: string;
+    expiresIn: number;
+}

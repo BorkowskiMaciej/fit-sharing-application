@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axiosInstance from '../../axiosConfig';
 import {User} from "../../types";
-import NewsComponent from "../news/NewsComponent";
+import FriendsNewsList from "../news/FriendsNewsList";
 
-const UserProfile: React.FC = () => {
+const FriendProfile: React.FC = () => {
     const { uuid } = useParams<{ uuid: string }>();
     const [user, setUser] = useState<User | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -38,7 +38,7 @@ const UserProfile: React.FC = () => {
 
     return (
 
-        <div className="user-search-container">
+        <div className="user-container">
             <div className="user-profile-container">
                 <div className="user-info">
                     <img src={staticPhotoUrl} alt="User Photo" className="user-photo" />
@@ -48,9 +48,11 @@ const UserProfile: React.FC = () => {
                     <p>Opis: {user.description}</p>
                 </div>
             </div>
-            <NewsComponent />
+            <div className="news-section">
+                <FriendsNewsList friendFsUserId={user.fsUserId} />
+            </div>
         </div>
     );
 };
 
-export default UserProfile;
+export default FriendProfile;
