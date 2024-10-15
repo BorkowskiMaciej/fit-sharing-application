@@ -41,6 +41,14 @@ const RelationshipList = () => {
         fetchAcceptedRelationships();
         fetchSentRelationships();
         fetchReceivedRelationships();
+
+        const interval = setInterval(() => {
+            fetchAcceptedRelationships()
+            fetchSentRelationships()
+            fetchReceivedRelationships();
+        }, 3000);
+
+        return () => {clearInterval(interval)};
     }, [query]);
 
     return (

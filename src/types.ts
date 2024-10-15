@@ -19,7 +19,9 @@ export interface RelationshipResponse {
 export interface News {
     id: string;
     publisherFsUserId: string;
+    publisherUsername: string;
     receiverFsUserId: string;
+    receiverUsername: string;
     data: string;
     createdAt: string;
 }

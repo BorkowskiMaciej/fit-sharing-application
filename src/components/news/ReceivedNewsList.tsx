@@ -6,17 +6,18 @@ import NewsCard from './NewsCard';
 const ReceivedNewsList: React.FC = () => {
     const [newsList, setNewsList] = useState<News[]>([]);
 
-    const fetchNews = async () => {
-        try {
-            const receivedNews = await getAllReceivedNews();
-            setNewsList(receivedNews);
-        } catch (error) {
-            console.error('Failed to fetch news:', error);
-        }
-    };
-
     useEffect(() => {
+        const fetchNews = async () => {
+            try {
+                const receivedNews = await getAllReceivedNews();
+                setNewsList(receivedNews);
+            } catch (error) {
+                console.error('Failed to fetch news:', error);
+            }
+        };
         fetchNews();
+        const interval = setInterval(fetchNews, 3000);
+        return () => clearInterval(interval);
     }, []);
 
     return (
@@ -25,7 +26,7 @@ const ReceivedNewsList: React.FC = () => {
                 <p>No news found. Send new invitations!</p>
             ) : (
                 newsList.map(news => (
-                    <NewsCard key={news.id} news={news} onDelete={fetchNews}/>
+                    <NewsCard key={news.id} news={news} onDelete={() => null}/>
                 ))
             )}
         </div>
