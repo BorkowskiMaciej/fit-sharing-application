@@ -49,7 +49,7 @@ const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({ onSubmit }) =
     );
 };
 
-const MyNews = () => {
+const MyNewsComponent = () => {
     const [newsList, setNewsList] = useState<News[]>([]);
 
     const fetchNews = async () => {
@@ -82,4 +82,4 @@ const MyNews = () => {
     );
 };
 
-export default MyNews;
+export default MyNewsComponent;

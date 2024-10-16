@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../axiosConfig';
 import {User} from "../../types";
-import MyNews from "../news/MyNews";
+import MyNewsComponent from "../news/MyNewsComponent";
 import {useNavigate} from "react-router-dom";
 
 const MyProfile: React.FC = () => {
@@ -52,7 +52,7 @@ const MyProfile: React.FC = () => {
                 </div>
             </div>
             <div className="news-section">
-                <MyNews />
+                <MyNewsComponent />
             </div>
         </div>
     );

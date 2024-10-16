@@ -223,7 +223,7 @@ export default function Register() {
                         {descriptionError && <div className="alert alert-danger">{descriptionError}</div>}
                     </label>
                     <div>
-                        <button type="submit">Register</button>
+                        <button type="submit" className='accept-button'>Register</button>
                     </div>
                 </form>
                 <div>

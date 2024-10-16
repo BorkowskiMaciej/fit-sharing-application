@@ -89,7 +89,7 @@ export default function Login({ setToken }: LoginProps) {
                         />
                     </label>
                     <div>
-                        <button type="submit">Log in</button>
+                        <button type="submit" className='accept-button'>Log in</button>
                     </div>
                 </form>
                 <div>
