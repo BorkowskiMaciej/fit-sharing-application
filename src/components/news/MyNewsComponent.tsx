@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {CreateNewsRequest, News} from '../../types';
+import {CreateNewsRequest, News, SportCategory} from '../../types';
 import NewsCard from './NewsCard';
 import axiosInstance from "../../axiosConfig";
 import {createNews, getFriends} from "../../services/NewsService";
@@ -10,17 +10,19 @@ interface CreateNewsComponentProps {
 
 const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({ onSubmit }) => {
     const [newsData, setNewsData] = useState<string>('');
+    const [selectedCategory, setSelectedCategory] = useState(SportCategory.RUNNING);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (!newsData.trim()) return;
+        const data = `${selectedCategory}-${newsData}`;
 
         try {
             const friendIds = await getFriends();
             const createNewsPromises = friendIds.map((friendId) => {
                 const newsRequest: CreateNewsRequest = {
                     receiverFsUserId: friendId,
-                    data: newsData
+                    data: data
                 };
                 return createNews(newsRequest);
             });
@@ -37,13 +39,23 @@ const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({ onSubmit }) =
         <div className="create-news-container">
             <form onSubmit={handleSubmit} className="create-news-form">
                 <textarea
-                    id="newsData"
+                    className="create-news-textarea"
                     value={newsData}
                     onChange={(e) => setNewsData(e.target.value)}
                     placeholder="Post some news..."
                     required
                 />
-                <button type="submit" className="submit-news-btn">Post</button>
+                <div>
+                    <select
+                        className="create-news-select"
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value as SportCategory)}>
+                        {Object.values(SportCategory).map(category => (
+                            <option key={category} value={category}>{category}</option>
+                        ))}
+                    </select>
+                    <button type="submit" className="submit-news-btn">Post</button>
+                </div>
             </form>
         </div>
     );

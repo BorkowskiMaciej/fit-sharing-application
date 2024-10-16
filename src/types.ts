@@ -37,3 +37,11 @@ export interface UserToken {
     token: string;
     expiresIn: number;
 }
+
+export enum SportCategory {
+    RUNNING = "RUNNING",
+    CYCLING = "CYCLING",
+    WALKING = "WALKING",
+    TENNIS = "TENNIS",
+    SWIMMING = "SWIMMING"
+}
