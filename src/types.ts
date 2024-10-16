@@ -1,6 +1,7 @@
 export interface User {
     fsUserId: string;
     username: string;
+    email: string;
     firstName: string;
     lastName: string;
     age: number;

@@ -81,6 +81,7 @@ export default function Register() {
 
         if (!lastName.trim() || lastName.length > 15) {
             setLastNameError("Last name must be between 1 and 15 characters long and cannot be only whitespace.");
+            return;
         } else {
             setLastNameError("");
         }
