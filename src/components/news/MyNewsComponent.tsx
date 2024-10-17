@@ -3,9 +3,15 @@ import {CreateNewsRequest, News, SportCategory} from '../../types';
 import NewsCard from './NewsCard';
 import axiosInstance from "../../axiosConfig";
 import {createNews, getFriends} from "../../services/NewsService";
+import {encryptData, importPublicKey} from "../../utils/cryptoUtils";
 
 interface CreateNewsComponentProps {
     onSubmit: () => void;
+}
+
+interface responseData {
+    publicKey: string;
+    fsUserId: string;
 }
 
 const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({ onSubmit }) => {
@@ -18,14 +24,19 @@ const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({ onSubmit }) =
         const data = `${selectedCategory}-${newsData}`;
 
         try {
-            const friendIds = await getFriends();
-            const createNewsPromises = friendIds.map((friendId) => {
+            const response = await getFriends();
+
+            const createNewsPromises = response.map(async (responseData: responseData) => {
+                const publicKey = await importPublicKey(responseData.publicKey);
+                const encryptedData = await encryptData(publicKey, data);
+
                 const newsRequest: CreateNewsRequest = {
-                    receiverFsUserId: friendId,
-                    data: data
+                    receiverFsUserId: responseData.fsUserId,
+                    data: encryptedData
                 };
                 return createNews(newsRequest);
             });
+
             const createdNewsResponses = await Promise.all(createNewsPromises);
             console.log('News Created for all friends:', createdNewsResponses);
             setNewsData('');

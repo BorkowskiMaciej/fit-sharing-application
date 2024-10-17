@@ -6,6 +6,7 @@ export interface User {
     lastName: string;
     age: number;
     description: string;
+    publicKey: string;
 }
 
 export interface RelationshipResponse {

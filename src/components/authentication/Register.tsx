@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import axiosInstance from '../../axiosConfig';
 import {Link, useNavigate} from 'react-router-dom';
 import {AxiosError} from "axios";
+import {exportPublicKey, generateKeyPair, savePrivateKey} from "../../utils/cryptoUtils";
 
 type RegisterCredentials = {
     username: string;
@@ -11,6 +12,7 @@ type RegisterCredentials = {
     lastName: string;
     age: number;
     description: string;
+    publicKey: string;
 };
 
 async function registerUser(credentials: RegisterCredentials) {
@@ -94,6 +96,9 @@ export default function Register() {
         }
 
         try {
+            const keyPair = await generateKeyPair();
+            const publicKey = await exportPublicKey(keyPair.publicKey);
+
             const response = await registerUser({
                 username: username || '',
                 password: password || '',
@@ -102,8 +107,10 @@ export default function Register() {
                 lastName: lastName || '',
                 age: age || 0,
                 description: description || '',
+                publicKey: publicKey || ''
             });
             if (response.status === 201) {
+                await savePrivateKey(keyPair.privateKey, response.data.fsUserId);
                 navigate('/login', { state: { message: 'Successfully registered. Please log in.' } });
             } else {
                 throw new Error(`Unexpected response status: ${response.status}`);
