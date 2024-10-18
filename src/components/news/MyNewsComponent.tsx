@@ -3,7 +3,8 @@ import {CreateNewsRequest, News, SportCategory} from '../../types';
 import NewsCard from './NewsCard';
 import axiosInstance from "../../axiosConfig";
 import {createNews, getFriends} from "../../services/NewsService";
-import {encryptData, importPublicKey} from "../../utils/cryptoUtils";
+import {decryptNews, encryptData, getPrivateKey, importPublicKey} from "../../utils/cryptoUtils";
+import useToken from "../../useToken";
 
 interface CreateNewsComponentProps {
     onSubmit: () => void;
@@ -24,15 +25,20 @@ const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({ onSubmit }) =
         const data = `${selectedCategory}-${newsData}`;
 
         try {
-            const response = await getFriends();
+            const myPublicKey = await importPublicKey((await axiosInstance.get('/keys')).data.publicKey);
+            const encryptedReferenceNewsData = await encryptData(myPublicKey, data);
+            const referenceNewsId = await axiosInstance.post('/news/reference', {
+                data: encryptedReferenceNewsData
+            }).then(response => response.data.id);
 
-            const createNewsPromises = response.map(async (responseData: responseData) => {
+            const createNewsPromises = (await getFriends()).map(async (responseData: responseData) => {
                 const publicKey = await importPublicKey(responseData.publicKey);
-                const encryptedData = await encryptData(publicKey, data);
+                const encryptedNewsData = await encryptData(publicKey, data);
 
                 const newsRequest: CreateNewsRequest = {
+                    referenceNewsId: referenceNewsId,
                     receiverFsUserId: responseData.fsUserId,
-                    data: encryptedData
+                    data: encryptedNewsData
                 };
                 return createNews(newsRequest);
             });
@@ -74,11 +80,18 @@ const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({ onSubmit }) =
 
 const MyNewsComponent = () => {
     const [newsList, setNewsList] = useState<News[]>([]);
+    const { tokenData } = useToken();
 
     const fetchNews = async () => {
         try {
-            const response = await axiosInstance.get(`/news/published`);
-            setNewsList(response.data);
+            const publishedNews = await axiosInstance.get(`/news/published`).then(response => response.data);
+            const privateKey = await getPrivateKey(tokenData?.fsUserId);
+            if (privateKey) {
+                const decryptedNews = await decryptNews(publishedNews, privateKey);
+                setNewsList(decryptedNews);
+            } else {
+                setNewsList(publishedNews);
+            }
         } catch (error) {
             console.error('Failed to fetch news:', error);
         }
@@ -86,7 +99,7 @@ const MyNewsComponent = () => {
 
     useEffect(() => {
         fetchNews();
-    }, []);
+    }, [tokenData?.fsUserId]);
 
     return (
         <>

@@ -29,6 +29,7 @@ export interface News {
 }
 
 export interface CreateNewsRequest {
+    referenceNewsId: string;
     receiverFsUserId: string;
     data: string;
 }

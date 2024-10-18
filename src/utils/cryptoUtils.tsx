@@ -59,7 +59,7 @@ export async function savePrivateKey(privateKey: CryptoKey, fsUserId: string) {
     });
 }
 
-export async function getPrivateKey(fsUserId: string | undefined): Promise<CryptoKey | null> {
+export async function getPrivateKey(fsUserId: string | undefined): Promise<CryptoKey> {
     return new Promise((resolve, reject) => {
         const request = window.indexedDB.open("keyDatabase", 1);
 
