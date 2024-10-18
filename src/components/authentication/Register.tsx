@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import axiosInstance from '../../axiosConfig';
+import axiosInstance from '../../configuration/axiosConfig';
 import {Link, useNavigate} from 'react-router-dom';
 import {AxiosError} from "axios";
 import {exportPublicKey, generateKeyPair, savePrivateKey} from "../../utils/cryptoUtils";

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axiosInstance from '../../axiosConfig';
+import axiosInstance from '../../configuration/axiosConfig';
 import { useParams } from 'react-router-dom';
 import { User } from '../../types';
 import UserCard from "./UserCard";

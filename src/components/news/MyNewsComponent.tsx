@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {CreateNewsRequest, News, SportCategory} from '../../types';
 import NewsCard from './NewsCard';
-import axiosInstance from "../../axiosConfig";
+import axiosInstance from "../../configuration/axiosConfig";
 import {createNews, getFriends} from "../../services/NewsService";
 import {decryptNews, encryptData, getPrivateKey, importPublicKey} from "../../utils/cryptoUtils";
-import useToken from "../../useToken";
+import useToken from "../../hooks/useToken";
 
 interface CreateNewsComponentProps {
     onSubmit: () => void;
@@ -29,7 +29,7 @@ const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({ onSubmit }) =
             const encryptedReferenceNewsData = await encryptData(myPublicKey, data);
             const referenceNewsId = await axiosInstance.post('/news/reference', {
                 data: encryptedReferenceNewsData
-            }).then(response => response.data.id);
+            }).then(response => response.data.referenceNewsId);
 
             const createNewsPromises = (await getFriends()).map(async (responseData: responseData) => {
                 const publicKey = await importPublicKey(responseData.publicKey);
@@ -84,7 +84,7 @@ const MyNewsComponent = () => {
 
     const fetchNews = async () => {
         try {
-            const publishedNews = await axiosInstance.get(`/news/published`).then(response => response.data);
+            const publishedNews = await axiosInstance.get(`/news/reference`).then(response => response.data);
             const privateKey = await getPrivateKey(tokenData?.fsUserId);
             if (privateKey) {
                 const decryptedNews = await decryptNews(publishedNews, privateKey);

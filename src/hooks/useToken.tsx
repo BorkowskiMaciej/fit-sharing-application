@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import {UserToken} from "./types";
+import {UserToken} from "../types";
 
 export default function useToken() {
     const [tokenData, setTokenData] = useState<UserToken | null>(null);

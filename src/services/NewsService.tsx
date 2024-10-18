@@ -1,4 +1,4 @@
-import axiosInstance from "../axiosConfig";
+import axiosInstance from "../configuration/axiosConfig";
 import { News, CreateNewsRequest } from '../types';
 
 export const createNews = async (newsData: CreateNewsRequest): Promise<News> => {

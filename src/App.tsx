@@ -1,16 +1,16 @@
 import React from 'react';
-import '../styles.css';
+import './styles.css';
 import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom';
-import NavBar from "./navigation/NavBar";
-import UserList from "./user/UserList";
-import Login from "./authentication/Login";
-import useToken from "../useToken";
-import Register from "./authentication/Register";
-import RelationshipList from "./RelationshipList";
-import ReceivedNewsList from "./news/ReceivedNewsList";
-import FriendProfile from "./user/FriendProfile";
-import MyProfile from "./user/MyProfile";
-import EditProfile from "./user/EditProfile";
+import NavBar from "./components/navigation/NavBar";
+import UserList from "./components/user/UserList";
+import Login from "./components/authentication/Login";
+import useToken from "./hooks/useToken";
+import Register from "./components/authentication/Register";
+import RelationshipList from "./components/RelationshipList";
+import ReceivedNewsList from "./components/news/ReceivedNewsList";
+import FriendProfile from "./components/user/FriendProfile";
+import MyProfile from "./components/user/MyProfile";
+import EditProfile from "./components/user/EditProfile";
 
 const App: React.FC = () => {
     const { tokenData, setTokenData } = useToken();

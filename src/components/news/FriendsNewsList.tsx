@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { News } from '../../types';
 import NewsCard from './NewsCard';
-import axiosInstance from "../../axiosConfig";
+import axiosInstance from "../../configuration/axiosConfig";
 import {decryptNews, getPrivateKey} from "../../utils/cryptoUtils";
-import useToken from "../../useToken";
+import useToken from "../../hooks/useToken";
 
 interface FriendsNewsListProps {
     friendFsUserId: string;

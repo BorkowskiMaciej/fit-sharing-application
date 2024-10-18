@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 
-import axiosInstance from '../../axiosConfig';
+import axiosInstance from '../../configuration/axiosConfig';
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {AxiosError} from "axios";
 

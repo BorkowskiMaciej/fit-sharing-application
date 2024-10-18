@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axiosInstance from '../../axiosConfig';
+import axiosInstance from '../../configuration/axiosConfig';
 import {User} from "../../types";
 import MyNewsComponent from "../news/MyNewsComponent";
 import {useNavigate} from "react-router-dom";

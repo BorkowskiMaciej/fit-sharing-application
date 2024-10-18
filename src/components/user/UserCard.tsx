@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../axiosConfig";
-import useToken from "../../useToken";
+import axiosInstance from "../../configuration/axiosConfig";
+import useToken from "../../hooks/useToken";
 
 interface UserCardProps {
     username: string,
