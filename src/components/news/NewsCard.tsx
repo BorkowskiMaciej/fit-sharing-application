@@ -10,13 +10,24 @@ interface NewsCardProps {
 }
 
 const parseNewsData = (data: string) => {
-    const [category, ...contentParts] = data.split('-');
-    return { category, content: contentParts.join('-') };
+    try {
+        const parsedData = JSON.parse(data);
+        return {
+            category: parsedData.category,
+            content: parsedData.content,
+            kcal: parsedData.kcal,
+            time: parsedData.time,
+            distance: parsedData.distance
+        };
+    } catch (error) {
+        console.error("Failed to parse news data:", error);
+        return { category: "", content: "", kcal: 0, time: "00:00", distance: 0 };
+    }
 };
 
 const NewsCard: React.FC<NewsCardProps> = ({ news, onDelete }) => {
     const { tokenData } = useToken();
-    const { category, content } = parseNewsData(news.data);
+    const { category, content, kcal, time, distance } = parseNewsData(news.data);
     const [showActions, setShowActions] = useState(false);
 
     const handleDelete = async () => {
@@ -45,6 +56,11 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, onDelete }) => {
                 <p className="news-date">{moment(news.createdAt).fromNow()}</p>
             </div>
             <p className="news-content">{content}</p>
+            <div className="news-details">
+                <p><strong>Time:</strong> {time}</p>
+                <p><strong>Kcal:</strong> {kcal}</p>
+                {distance > 0 && <p><strong>Distance:</strong> {distance} meters</p>}
+            </div>
             {news.publisherFsUserId === tokenData?.fsUserId && (
                 <div className="action-container">
                     <div className="action-icon-container" onClick={() => setShowActions(!showActions)}>
@@ -56,7 +72,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, onDelete }) => {
                     </div>
                     {showActions && (
                         <ul className="actions-list">
-                            <li onClick={handleDelete}>Delete</li>
+                            <li onClick={handleDelete}>Delete news</li>
                         </ul>
                     )}
                 </div>

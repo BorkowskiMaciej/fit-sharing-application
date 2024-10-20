@@ -24,10 +24,12 @@ const ReceivedNewsList: React.FC = () => {
                 console.error('Failed to fetch news:', error);
             }
         };
-        fetchNews();
+        if (tokenData) {
+            fetchNews();
+        }
         // const interval = setInterval(fetchNews, 3000);
         // return () => clearInterval(interval);
-    }, [tokenData?.fsUserId]);
+    }, [tokenData]);
 
     return (
         <div className="user-list-container">
