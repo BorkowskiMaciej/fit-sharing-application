@@ -11,6 +11,7 @@ import ReceivedNewsList from "./components/news/ReceivedNewsList";
 import FriendProfile from "./components/user/FriendProfile";
 import MyProfile from "./components/user/MyProfile";
 import EditProfile from "./components/user/EditProfile";
+import ResetPassword from "./components/authentication/ResetPassword";
 
 const App: React.FC = () => {
     const { tokenData, setTokenData } = useToken();
@@ -21,6 +22,7 @@ const App: React.FC = () => {
                 <Routes>
                     <Route path="/login" element={<Login setToken={setTokenData} />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
                     <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>
             </Router>

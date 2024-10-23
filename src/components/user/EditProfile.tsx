@@ -200,8 +200,8 @@ const EditProfile: React.FC<{ setTokenData: (token: UserToken | null) => void }>
                             }}
                         >
                             <input {...getInputProps()} />
-                            {!selectedImage && <p>Drag and drop an image here, or click to select one</p>}
-                            {selectedImage && <p>Click to select a different image or drag another one</p>}
+                            {!selectedImage && <p>Drag and drop an image here, or click to select one.</p>}
+                            {selectedImage && <p>Click to select a different image or drag another one.</p>}
                         </div>
                     </label>
                     <label>

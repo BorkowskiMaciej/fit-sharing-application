@@ -289,8 +289,8 @@ export default function Register() {
                             }}
                         >
                             <input {...getInputProps()} />
-                            {!selectedImage && <p>Drag and drop an image here, or click to select one</p>}
-                            {selectedImage && <p>Click to select a different image or drag another one</p>}
+                            {!selectedImage && <p>Drag and drop an image here, or click to select one.</p>}
+                            {selectedImage && <p>Click to select a different image or drag another one.</p>}
                         </div>
                     </label>
                     <label>
@@ -333,10 +333,7 @@ export default function Register() {
                             }}/>
                         {descriptionError && <div className="alert alert-danger">{descriptionError}</div>}
                     </label>
-
-                    <div>
-                        <button type="submit" className='accept-button'>Register</button>
-                    </div>
+                    <button type="submit" className='accept-button' style={{ alignSelf: 'flex-end', width: '150px'}}>Register</button>
                 </form>
                 <div>
                     <Link to="/login">Already have an account?</Link>
