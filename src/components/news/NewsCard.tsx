@@ -3,6 +3,7 @@ import { News } from '../../types';
 import axiosInstance from "../../configuration/axiosConfig";
 import useToken from "../../hooks/useToken";
 import moment from 'moment';
+import {useNavigate} from "react-router-dom";
 
 interface NewsCardProps {
     news: News;
@@ -29,6 +30,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, onDelete }) => {
     const { tokenData } = useToken();
     const { category, content, kcal, time, distance } = parseNewsData(news.data);
     const [showActions, setShowActions] = useState(false);
+    const navigate = useNavigate();
 
     const handleDelete = async () => {
         try {
@@ -47,11 +49,20 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, onDelete }) => {
             console.error('Error:', error);
         }
     };
+    const defaultPhoto = '/user-photo.jpg';
 
     return (
         <div className="news-card">
             <div className="news-header">
-                <h4 className="news-sender">{news.publisherUsername}</h4>
+                <div className="news-sender" onClick={() => {
+                    if (news.publisherFsUserId === tokenData?.fsUserId) {
+                        navigate('/me');
+                    } else {
+                        navigate(`/user/${news.publisherFsUserId}`);
+                    }}}>
+                    <img src={news.publisherProfilePicture ? news.publisherProfilePicture : defaultPhoto} alt="" className="user-mini-mini-photo" />
+                    <h4>{news.publisherUsername}</h4>
+                </div>
                 <p className="news-category">{category}</p>
                 <p className="news-date">{moment(news.createdAt).fromNow()}</p>
             </div>
