@@ -309,6 +309,27 @@ button:hover {
     border-radius: 4px;
 }
 
+.form-wrapper input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-wrapper .gender-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #666;
+}
+
+.form-wrapper .gender-container label {
+    margin-right: 10px;
+}
+.form-wrapper .gender-container input {
+    margin-right: 5px;
+}
+
 .form-wrapper button {
     color: white;
     padding: 10px 15px;

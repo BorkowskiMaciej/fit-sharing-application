@@ -4,7 +4,8 @@ export interface User {
     email: string;
     firstName: string;
     lastName: string;
-    age: number;
+    dateOfBirth: Date;
+    gender: string;
     description: string;
     publicKey: string;
 }

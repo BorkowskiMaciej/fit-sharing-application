@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import axiosInstance from '../../configuration/axiosConfig';
 import {useNavigate} from 'react-router-dom';
 import {User, UserToken} from "../../types";
+import moment from "moment";
 
 const EditProfile: React.FC<{ setTokenData: (token: UserToken | null) => void }> = ({ setTokenData }) => {
     const [user, setUser] = useState<User | null>(null);
@@ -112,6 +113,14 @@ const EditProfile: React.FC<{ setTokenData: (token: UserToken | null) => void }>
                         />
                     </label>
                     <label>
+                        <p>Date of Birth</p>
+                        <input
+                            type="text"
+                            value={moment(user.dateOfBirth).format('DD-MM-YYYY')}
+                            disabled
+                        />
+                    </label>
+                    <label>
                         <p>First Name</p>
                         <input type="text" name="firstName" value={user.firstName} onChange={handleChange} required
                                style={{
@@ -128,14 +137,21 @@ const EditProfile: React.FC<{ setTokenData: (token: UserToken | null) => void }>
                         {lastNameError && <div className="alert alert-danger">{lastNameError}</div>}
                     </label>
                     <label>
-                        <p>Age</p>
-                        <input type="number"
-                               name="age"
-                               min="1"
-                               max="100"
-                               value={user.age}
-                               onChange={handleChange}
-                               required/>
+                        <p>Gender</p>
+                        <div className="gender-container">
+                            {['Male', 'Female', 'Other'].map((option) => (
+                                <label key={option}>
+                                    <input
+                                        type="radio"
+                                        name="gender"
+                                        value={option.toUpperCase()}
+                                        checked={user.gender === option.toUpperCase()}
+                                        onChange={handleChange}
+                                    />
+                                    {option}
+                                </label>
+                            ))}
+                        </div>
                     </label>
                     <label>
                         <p>Description</p>

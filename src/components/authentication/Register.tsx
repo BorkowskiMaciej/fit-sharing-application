@@ -10,7 +10,8 @@ type RegisterCredentials = {
     email: string;
     firstName: string;
     lastName: string;
-    age: number;
+    dateOfBirth: Date;
+    gender: string;
     description: string;
     publicKey: string;
 };
@@ -31,7 +32,8 @@ export default function Register() {
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [age, setAge] = useState<number | undefined>();
+    const [dateOfBirth, setDateOfBirth] = useState<string>("");
+    const [gender, setGender] = useState<string>("male"); // Domyślna wartość
     const [description, setDescription] = useState("");
     const [message, setMessage] = useState("");
     const [firstNameError, setFirstNameError] = useState("");
@@ -105,7 +107,8 @@ export default function Register() {
                 email: email || '',
                 firstName: firstName || '',
                 lastName: lastName || '',
-                age: age || 0,
+                dateOfBirth: new Date(dateOfBirth) || new Date(),
+                gender: gender || 'male',
                 description: description || '',
                 publicKey: publicKey || ''
             });
@@ -156,6 +159,7 @@ export default function Register() {
                             }}/>
                         {usernameError && <div className="alert alert-danger">{usernameError}</div>}
                     </label>
+
                     <label>
                         <p>Password</p>
                         <input
@@ -167,6 +171,7 @@ export default function Register() {
                             }}/>
                         {passwordError && <div className="alert alert-danger">{passwordError}</div>}
                     </label>
+
                     <label>
                         <p>Confirm password</p>
                         <input
@@ -178,10 +183,11 @@ export default function Register() {
                             }}/>
                         {confirmPasswordError && <div className="alert alert-danger">{confirmPasswordError}</div>}
                     </label>
+
                     <label>
                         <p>Email</p>
                         <input
-                            type="text"
+                            type="email"
                             required
                             onChange={e => setEmail(e.target.value)}
                             style={{
@@ -189,6 +195,7 @@ export default function Register() {
                             }}/>
                         {emailError && <div className="alert alert-danger">{emailError}</div>}
                     </label>
+
                     <label>
                         <p>First Name</p>
                         <input
@@ -200,6 +207,7 @@ export default function Register() {
                             }}/>
                         {firstNameError && <div className="alert alert-danger">{firstNameError}</div>}
                     </label>
+
                     <label>
                         <p>Last Name</p>
                         <input
@@ -211,15 +219,33 @@ export default function Register() {
                             }}/>
                         {lastNameError && <div className="alert alert-danger">{lastNameError}</div>}
                     </label>
+
                     <label>
-                        <p>Age</p>
+                        <p>Date of Birth</p>
                         <input
-                            type="number"
-                            min="1"
-                            max="100"
+                            type="date"
                             required
-                            onChange={e => setAge(parseInt(e.target.value, 10))}/>
+                            onChange={e => setDateOfBirth(e.target.value)} />
                     </label>
+
+                    <label>
+                        <p>Gender</p>
+                        <div className="gender-container">
+                            <label>
+                                <input type="radio" name="gender" value="MALE" onChange={e => setGender(e.target.value)} />
+                                Male
+                            </label>
+                            <label>
+                                <input type="radio" name="gender" value="FEMALE" onChange={e => setGender(e.target.value)} />
+                                Female
+                            </label>
+                            <label>
+                                <input type="radio" name="gender" value="OTHER" onChange={e => setGender(e.target.value)} />
+                                Other
+                            </label>
+                        </div>
+                    </label>
+
                     <label>
                         <p>Description</p>
                         <textarea
@@ -229,6 +255,7 @@ export default function Register() {
                             }}/>
                         {descriptionError && <div className="alert alert-danger">{descriptionError}</div>}
                     </label>
+
                     <div>
                         <button type="submit" className='accept-button'>Register</button>
                     </div>

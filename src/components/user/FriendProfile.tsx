@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import axiosInstance from '../../configuration/axiosConfig';
 import {User} from "../../types";
 import FriendsNewsList from "../news/FriendsNewsList";
+import moment from "moment/moment";
 
 const FriendProfile: React.FC = () => {
     const { uuid } = useParams<{ uuid: string }>();
@@ -44,8 +45,9 @@ const FriendProfile: React.FC = () => {
                     <img src={staticPhotoUrl} alt="User Photo" className="user-photo" />
                     <h2 style={{ textTransform: 'lowercase' }}>{user.username}</h2>
                     <h3 style={{ textAlign: 'center' }}>{`${user.firstName} ${user.lastName}`}</h3>
-                    <p>Wiek: {user.age}</p>
-                    <p>Opis: {user.description}</p>
+                    <p>Age: {moment().diff(moment(user.dateOfBirth), 'years')}</p>
+                    <p>Gender: {user.gender.charAt(0).toUpperCase() + user.gender.slice(1).toLowerCase()}</p>
+                    <p>Description: {user.description}</p>
                 </div>
             </div>
             <div className="news-section">
