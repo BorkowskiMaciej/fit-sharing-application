@@ -32,14 +32,13 @@ const MyProfile: React.FC = () => {
         return <div>Loading...</div>;
     }
 
-    const staticPhotoUrl = '/user-photo.jpg';
+    const defaultPhoto = '/user-photo.jpg';
 
     return (
-
         <div className="user-container">
             <div className="user-profile-container">
                 <div className="user-info">
-                    <img src={staticPhotoUrl} alt="User Photo" className="user-photo" />
+                    <img src={user.profilePicture ? user.profilePicture : defaultPhoto} alt="" className="user-photo" />
                     <h2 style={{ textTransform: 'lowercase' }}>{user.username}</h2>
                     <h3 style={{ textAlign: 'center' }}>{`${user.firstName} ${user.lastName}`}</h3>
                     <p>Age: {moment().diff(moment(user.dateOfBirth), 'years')}</p>

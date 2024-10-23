@@ -1,8 +1,10 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import axiosInstance from '../../configuration/axiosConfig';
 import {Link, useNavigate} from 'react-router-dom';
 import {AxiosError} from "axios";
 import {exportPublicKey, generateKeyPair, savePrivateKey} from "../../utils/cryptoUtils";
+import AvatarEditor from "react-avatar-editor";
+import {useDropzone} from "react-dropzone";
 
 type RegisterCredentials = {
     username: string;
@@ -14,6 +16,7 @@ type RegisterCredentials = {
     gender: string;
     description: string;
     publicKey: string;
+    profilePicture?: string;
 };
 
 async function registerUser(credentials: RegisterCredentials) {
@@ -33,7 +36,7 @@ export default function Register() {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [dateOfBirth, setDateOfBirth] = useState<string>("");
-    const [gender, setGender] = useState<string>("male"); // Domyślna wartość
+    const [gender, setGender] = useState<string>("OTHER");
     const [description, setDescription] = useState("");
     const [message, setMessage] = useState("");
     const [firstNameError, setFirstNameError] = useState("");
@@ -43,6 +46,9 @@ export default function Register() {
     const [descriptionError, setDescriptionError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [scale, setScale] = useState(1);
+    const editorRef = useRef<AvatarEditor | null>(null);
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -100,6 +106,7 @@ export default function Register() {
         try {
             const keyPair = await generateKeyPair();
             const publicKey = await exportPublicKey(keyPair.publicKey);
+            const profilePictureBase64 = editorRef.current ? await getAvatarAsBase64(editorRef.current) : null;
 
             const response = await registerUser({
                 username: username || '',
@@ -110,7 +117,8 @@ export default function Register() {
                 dateOfBirth: new Date(dateOfBirth) || new Date(),
                 gender: gender || 'male',
                 description: description || '',
-                publicKey: publicKey || ''
+                publicKey: publicKey || '',
+                profilePicture: profilePictureBase64 || undefined
             });
             if (response.status === 201) {
                 await savePrivateKey(keyPair.privateKey, response.data.fsUserId);
@@ -136,6 +144,29 @@ export default function Register() {
             }
         }
     };
+
+    const getAvatarAsBase64 = (editor: AvatarEditor): Promise<string | null> => {
+        return new Promise((resolve, reject) => {
+            if (editor) {
+                const canvas = editor.getImageScaledToCanvas();
+                const base64Image = canvas.toDataURL();
+                resolve(base64Image);
+            } else {
+                reject(new Error('Editor is not initialized.'));
+            }
+        });
+    };
+
+    const { getRootProps, getInputProps } = useDropzone({
+        accept: {
+            'image/*': ['.jpeg', '.jpg', '.png']
+        },
+        onDrop: (acceptedFiles: File[]) => {
+            if (acceptedFiles && acceptedFiles.length > 0) {
+                setSelectedImage(acceptedFiles[0]);
+            }
+        },
+    });
 
     return (
         <>
@@ -245,7 +276,54 @@ export default function Register() {
                             </label>
                         </div>
                     </label>
-
+                    <label>
+                        <p>Profile Picture</p>
+                        <div
+                            {...getRootProps()}
+                            style={{
+                                border: '2px dashed #ccc',
+                                padding: '20px',
+                                borderRadius: '8px',
+                                textAlign: 'center',
+                                cursor: 'pointer',
+                            }}
+                        >
+                            <input {...getInputProps()} />
+                            {!selectedImage && <p>Drag and drop an image here, or click to select one</p>}
+                            {selectedImage && <p>Click to select a different image or drag another one</p>}
+                        </div>
+                    </label>
+                    <label>
+                            {selectedImage && (
+                                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                                    <AvatarEditor
+                                        ref={editorRef}
+                                        image={selectedImage}
+                                        width={300}
+                                        height={300}
+                                        border={5}
+                                        borderRadius={150}
+                                        scale={scale}
+                                    />
+                                </div>
+                            )}
+                            {selectedImage && (
+                                <div style={{ textAlign: 'center', marginTop: '10px'}}>
+                                    <input
+                                        style={{marginRight: '10px'}}
+                                        type="range"
+                                        min="1"
+                                        max="3"
+                                        step="0.01"
+                                        value={scale}
+                                        onChange={(e) => setScale(parseFloat(e.target.value))}
+                                    />
+                                    <button type="button" className="delete-photo-button" onClick={() => {
+                                        setSelectedImage(null);
+                                    }}>Remove Image</button>
+                                </div>
+                            )}
+                    </label>
                     <label>
                         <p>Description</p>
                         <textarea

@@ -68,6 +68,7 @@ const RelationshipList = () => {
                                           firstName={response.friendFirstName}
                                           lastName={response.friendLastName}
                                           fsUserId={response.friendFsUserId}
+                                          profilePicture={response.profilePicture}
                                 />
                             ))}
                         </div>
@@ -83,6 +84,7 @@ const RelationshipList = () => {
                                           firstName={response.friendFirstName}
                                           lastName={response.friendLastName}
                                           fsUserId={response.friendFsUserId}
+                                          profilePicture={response.profilePicture}
                                 />
                             ))}
                         </div>
@@ -99,6 +101,7 @@ const RelationshipList = () => {
                                           firstName={response.friendFirstName}
                                           lastName={response.friendLastName}
                                           fsUserId={response.friendFsUserId}
+                                          profilePicture={response.profilePicture}
                                 />
                             ))}
                         </div>

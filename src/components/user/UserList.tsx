@@ -32,6 +32,7 @@ const UserList = () => {
                               firstName={user.firstName}
                               lastName={user.lastName}
                               fsUserId={user.fsUserId}
+                              profilePicture={user.profilePicture}
                     />
                 ))
             )}

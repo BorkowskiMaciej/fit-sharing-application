@@ -1,8 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import axiosInstance from '../../configuration/axiosConfig';
 import {useNavigate} from 'react-router-dom';
 import {User, UserToken} from "../../types";
 import moment from "moment";
+import AvatarEditor from "react-avatar-editor";
+import {useDropzone} from "react-dropzone";
 
 const EditProfile: React.FC<{ setTokenData: (token: UserToken | null) => void }> = ({ setTokenData }) => {
     const [user, setUser] = useState<User | null>(null);
@@ -10,12 +12,16 @@ const EditProfile: React.FC<{ setTokenData: (token: UserToken | null) => void }>
     const [firstNameError, setFirstNameError] = useState("");
     const [lastNameError, setLastNameError] = useState("");
     const [descriptionError, setDescriptionError] = useState("");
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [scale, setScale] = useState(1);
+    const editorRef = useRef<AvatarEditor | null>(null);
 
     useEffect(() => {
         const loadData = async () => {
             try {
                 const response = await axiosInstance.get(`/users/me`);
                 setUser(response.data);
+                setSelectedImage(response.data.profilePicture)
             } catch (error) {
                 console.log('Failed to fetch user data', error);
             }
@@ -49,7 +55,12 @@ const EditProfile: React.FC<{ setTokenData: (token: UserToken | null) => void }>
         }
 
         try {
-            const response = await axiosInstance.put(`/users`, user);
+            const profilePictureBase64 = editorRef.current ? await getAvatarAsBase64(editorRef.current) : null;
+
+            const response = await axiosInstance.put(`/users`, {
+                ...user,
+                profilePicture: profilePictureBase64
+            });
             if (response.status === 200) {
                 window.dispatchEvent(new CustomEvent('showMessage',
                     {detail: {message: 'Profile updated successfully.', type: 'green'}}));
@@ -66,6 +77,29 @@ const EditProfile: React.FC<{ setTokenData: (token: UserToken | null) => void }>
         const {name, value} = e.target;
         setUser(prev => prev ? {...prev, [name]: value} : null);
     };
+
+    const getAvatarAsBase64 = (editor: AvatarEditor): Promise<string | null> => {
+        return new Promise((resolve, reject) => {
+            if (editor) {
+                const canvas = editor.getImageScaledToCanvas();
+                const base64Image = canvas.toDataURL();
+                resolve(base64Image);
+            } else {
+                reject(new Error('Editor is not initialized.'));
+            }
+        });
+    };
+
+    const { getRootProps, getInputProps } = useDropzone({
+        accept: {
+            'image/*': ['.jpeg', '.jpg', '.png']
+        },
+        onDrop: (acceptedFiles: File[]) => {
+            if (acceptedFiles && acceptedFiles.length > 0) {
+                setSelectedImage(acceptedFiles[0]);
+            }
+        },
+    });
 
     const handleUserDelete = async () => {
         if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
@@ -152,6 +186,54 @@ const EditProfile: React.FC<{ setTokenData: (token: UserToken | null) => void }>
                                 </label>
                             ))}
                         </div>
+                    </label>
+                    <label>
+                        <p>Profile Picture</p>
+                        <div
+                            {...getRootProps()}
+                            style={{
+                                border: '2px dashed #ccc',
+                                padding: '20px',
+                                borderRadius: '8px',
+                                textAlign: 'center',
+                                cursor: 'pointer',
+                            }}
+                        >
+                            <input {...getInputProps()} />
+                            {!selectedImage && <p>Drag and drop an image here, or click to select one</p>}
+                            {selectedImage && <p>Click to select a different image or drag another one</p>}
+                        </div>
+                    </label>
+                    <label>
+                        {selectedImage && (
+                            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                                <AvatarEditor
+                                    ref={editorRef}
+                                    image={selectedImage}
+                                    width={300}
+                                    height={300}
+                                    border={5}
+                                    borderRadius={150}
+                                    scale={scale}
+                                />
+                            </div>
+                        )}
+                        {selectedImage && (
+                            <div style={{ textAlign: 'center', marginTop: '10px'}}>
+                                <input
+                                    style={{marginRight: '10px'}}
+                                    type="range"
+                                    min="1"
+                                    max="3"
+                                    step="0.01"
+                                    value={scale}
+                                    onChange={(e) => setScale(parseFloat(e.target.value))}
+                                />
+                                <button type="button" className="delete-photo-button" onClick={() => {
+                                    setSelectedImage(null);
+                                }}>Remove Image</button>
+                            </div>
+                        )}
                     </label>
                     <label>
                         <p>Description</p>

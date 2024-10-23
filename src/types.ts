@@ -8,6 +8,7 @@ export interface User {
     gender: string;
     description: string;
     publicKey: string;
+    profilePicture: string;
 }
 
 export interface RelationshipResponse {
@@ -17,6 +18,7 @@ export interface RelationshipResponse {
     friendFirstName: string;
     friendLastName: string;
     status: string;
+    profilePicture: string;
 }
 
 export interface News {

@@ -8,11 +8,12 @@ interface UserCardProps {
     firstName: string,
     lastName: string,
     fsUserId: string,
+    profilePicture: string | null
 }
 
-const UserCard: React.FC<UserCardProps> = ({ username, firstName, lastName, fsUserId }) => {
+const UserCard: React.FC<UserCardProps> = ({ username, firstName, lastName, fsUserId, profilePicture}) => {
     const navigate = useNavigate();
-    const staticPhotoUrl = '/user-photo.jpg';
+    const defaultPhoto = '/user-photo.jpg';
     const [relationshipStatus, setRelationshipStatus] = useState('');
     const [senderFsUserId, setSenderFsUserId] = useState('');
     const [relationshipId, setRelationshipId] = useState('');
@@ -93,7 +94,7 @@ const UserCard: React.FC<UserCardProps> = ({ username, firstName, lastName, fsUs
     return (
         <div className="user-card-container">
             <div style={{ display: 'flex', alignItems: 'center' }} onClick={() => navigate(`/user/${fsUserId}`)}>
-                <img src={staticPhotoUrl} alt="User Photo" className="user-mini-photo"/>
+                <img src={profilePicture ? profilePicture : defaultPhoto} alt="" className="user-mini-photo" />
                 <div className="user-mini-info">
                     <h2 style={{ textAlign: 'left'}}>{username}</h2>
                     <p>{firstName} {lastName}</p>
