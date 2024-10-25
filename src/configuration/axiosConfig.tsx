@@ -8,10 +8,12 @@ axiosInstance.interceptors.request.use(
     (config) => {
         const tokenString = sessionStorage.getItem('token');
         const tokenData = tokenString ? JSON.parse(tokenString) : null;
+        const deviceId = sessionStorage.getItem('deviceId');
 
         if (tokenData) {
             config.headers['Authorization'] = `Bearer ${tokenData.token}`;
             config.headers['fs-user-id'] = tokenData.fsUserId;
+            config.headers['device-id'] = deviceId;
         }
         return config;
     },

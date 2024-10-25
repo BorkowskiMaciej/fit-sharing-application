@@ -13,6 +13,7 @@ interface CreateNewsComponentProps {
 interface responseData {
     publicKey: string;
     fsUserId: string;
+    deviceId: string;
 }
 
 const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({ onSubmit }) => {
@@ -47,6 +48,7 @@ const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({ onSubmit }) =
                 const newsRequest: CreateNewsRequest = {
                     referenceNewsId: referenceNewsId,
                     receiverFsUserId: responseData.fsUserId,
+                    receiverDeviceId: responseData.deviceId,
                     data: encryptedNewsData
                 };
                 return createNews(newsRequest);

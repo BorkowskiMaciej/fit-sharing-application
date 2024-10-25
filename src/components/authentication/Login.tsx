@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import axiosInstance from '../../configuration/axiosConfig';
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {AxiosError} from "axios";
+import {generateDeviceId, getDeviceId, saveDeviceId} from "../../utils/loginUtils";
+import {exportPublicKey, generateKeyPair, savePrivateKey} from "../../utils/cryptoUtils";
 
 type LoginCredentials = {
     username: string;
@@ -43,6 +45,7 @@ export default function Login({ setToken }: LoginProps) {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         try {
             const response = await loginUser({
                 username: username || '',
@@ -50,10 +53,30 @@ export default function Login({ setToken }: LoginProps) {
             });
             if (response.status === 200) {
                 setToken({ fsUserId: response.data.fsUserId, token: response.data.token, expiresIn: response.data.expiresIn });
-                navigate('/');
             } else {
                 throw new Error(`Unexpected response status: ${response.status}`);
             }
+
+            let deviceId = await getDeviceId(response.data.fsUserId);
+            if (!deviceId) {
+                deviceId = generateDeviceId();
+                const keyPair = await generateKeyPair();
+                const publicKey = await exportPublicKey(keyPair.publicKey);
+                const keyResponse = await axiosInstance.post('/keys', {
+                    publicKey: publicKey,
+                    deviceId: deviceId
+                });
+                if (keyResponse.status === 201) {
+                    await savePrivateKey(keyPair.privateKey, response.data.fsUserId);
+                    await saveDeviceId(deviceId, response.data.fsUserId);
+                    console.log('Public key saved successfully');
+                }
+                else {
+                    throw new Error('Failed to save public key');
+                }
+            }
+            sessionStorage.setItem('deviceId', deviceId);
+            navigate('/');
         } catch (error) {
             console.error('Login failed:', error);
             if (error instanceof AxiosError) {

@@ -5,6 +5,7 @@ import {AxiosError} from "axios";
 import {exportPublicKey, generateKeyPair, savePrivateKey} from "../../utils/cryptoUtils";
 import AvatarEditor from "react-avatar-editor";
 import {useDropzone} from "react-dropzone";
+import {generateDeviceId, saveDeviceId} from "../../utils/loginUtils";
 
 type RegisterCredentials = {
     username: string;
@@ -17,6 +18,7 @@ type RegisterCredentials = {
     description: string;
     publicKey: string;
     profilePicture?: string;
+    deviceId: string;
 };
 
 async function registerUser(credentials: RegisterCredentials) {
@@ -106,6 +108,7 @@ export default function Register() {
         try {
             const keyPair = await generateKeyPair();
             const publicKey = await exportPublicKey(keyPair.publicKey);
+            const deviceId = generateDeviceId();
             const profilePictureBase64 = editorRef.current ? await getAvatarAsBase64(editorRef.current) : null;
 
             const response = await registerUser({
@@ -118,10 +121,12 @@ export default function Register() {
                 gender: gender || 'male',
                 description: description || '',
                 publicKey: publicKey || '',
-                profilePicture: profilePictureBase64 || undefined
+                profilePicture: profilePictureBase64 || undefined,
+                deviceId: deviceId
             });
             if (response.status === 201) {
                 await savePrivateKey(keyPair.privateKey, response.data.fsUserId);
+                await saveDeviceId(deviceId, response.data.fsUserId);
                 navigate('/login', { state: { message: 'Successfully registered. Please log in.' } });
             } else {
                 throw new Error(`Unexpected response status: ${response.status}`);

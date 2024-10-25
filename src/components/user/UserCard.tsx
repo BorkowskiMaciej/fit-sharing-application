@@ -58,18 +58,6 @@ const UserCard: React.FC<UserCardProps> = ({ username, firstName, lastName, fsUs
         }
     };
 
-    const handleDeleteRelationship = async () => {
-        try {
-            await axiosInstance.delete(`/relationships/delete/${relationshipId}`);
-            window.dispatchEvent(new CustomEvent('showMessage',
-                { detail: { message: 'Relationship was deleted', type: 'green' } }));
-            fetchRelationship(fsUserId);
-        } catch (error) {
-            console.error('Failed to delete invitation:', error);
-        }
-    };
-
-
     const handleAcceptInvitation = async () => {
         try {
             await axiosInstance.post(`/relationships/accept/${relationshipId}`);
@@ -100,9 +88,6 @@ const UserCard: React.FC<UserCardProps> = ({ username, firstName, lastName, fsUs
                     <p>{firstName} {lastName}</p>
                 </div>
             </div>
-                {relationshipStatus === 'ACCEPTED' && (
-                    <button className="relationship-button reject-button" onClick={handleDeleteRelationship}>Remove from friends</button>
-                )}
                 {relationshipStatus === 'PENDING' && authorizedFsUserId === senderFsUserId && (
                     <button className="relationship-button reject-button" onClick={handleDeleteInvitation}>Delete invitation</button>
                 )}

@@ -137,6 +137,15 @@ svg:hover {
     display: block;
 }
 
+.user-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+}
+
 .news-section {
     display: flex;
     flex-direction: column;
@@ -563,7 +572,7 @@ button:hover {
 .actions-list {
     position: absolute;
     top: 0;
-    width: 150px;
+    width: 190px;
     right: 40px;
     background-color: #333;
     border-radius: 5px;

@@ -36,6 +36,7 @@ export interface CreateNewsRequest {
     referenceNewsId: string;
     receiverFsUserId: string;
     data: string;
+    receiverDeviceId: string;
 }
 
 export interface UserToken {
