@@ -2,6 +2,7 @@ import React from "react";
 import {useNavigate} from "react-router-dom";
 import useToken from "../../hooks/useToken";
 import {useRelationship} from "../../hooks/useRelationship";
+import '../../styles/user-card-styles.css';
 
 interface UserCardProps {
     username: string,
@@ -36,14 +37,14 @@ const UserCard: React.FC<UserCardProps> = ({ username, firstName, lastName, fsUs
                 </div>
             </div>
                 {relationshipStatus === 'PENDING' && authorizedFsUserId === senderFsUserId && (
-                    <button className="relationship-button reject-button" onClick={deleteInvitation}>Delete invitation</button>
+                    <button className="relationship-button red-button" onClick={deleteInvitation}>Delete invitation</button>
                 )}
                 {relationshipStatus === 'PENDING' && !(authorizedFsUserId === senderFsUserId) && (
                     <div className="buttons-container">
-                        <button className="relationship-button accept-button" onClick={acceptInvitation}>
+                        <button className="relationship-button green-button" onClick={acceptInvitation}>
                             Accept invitation
                         </button>
-                        <button className="relationship-button reject-button" onClick={rejectInvitation}>
+                        <button className="relationship-button red-button" onClick={rejectInvitation}>
                             Reject invitation
                         </button>
                     </div>

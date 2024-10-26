@@ -338,7 +338,7 @@ export default function Register() {
                             }}/>
                         {descriptionError && <div className="alert alert-danger">{descriptionError}</div>}
                     </label>
-                    <button type="submit" className='accept-button' style={{ alignSelf: 'flex-end', width: '150px'}}>Register</button>
+                    <button type="submit" className='green-button' style={{ alignSelf: 'flex-end', width: '150px'}}>Register</button>
                 </form>
                 <div>
                     <Link to="/login">Already have an account?</Link>

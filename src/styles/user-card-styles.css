@@ -1,0 +1,28 @@
+.user-card-container {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 95%;
+    background-color: #333;
+    color: white;
+    margin-bottom: 15px;
+}
+
+.user-mini-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 20px;
+    cursor: pointer;
+    object-fit: cover;
+}
+
+.user-mini-info {
+    flex-grow: 1;
+    margin-right: 20px;
+    cursor: pointer;
+}

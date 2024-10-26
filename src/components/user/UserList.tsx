@@ -22,20 +22,22 @@ const UserList = () => {
     }, [query]);
 
     return (
-        <div className="user-list-container">
-            {users.length === 0 ? (
-                <p>No users found. Change the search query.</p>
-            ) : (
-                users.map(user => (
-                    <UserCard key={user.username}
-                              username={user.username}
-                              firstName={user.firstName}
-                              lastName={user.lastName}
-                              fsUserId={user.fsUserId}
-                              profilePicture={user.profilePicture}
-                    />
-                ))
-            )}
+        <div className="main-component">
+            <div className="list-container">
+                {users.length === 0 ? (
+                    <p>No users found. Change the search query.</p>
+                ) : (
+                    users.map(user => (
+                        <UserCard key={user.username}
+                                  username={user.username}
+                                  firstName={user.firstName}
+                                  lastName={user.lastName}
+                                  fsUserId={user.fsUserId}
+                                  profilePicture={user.profilePicture}
+                        />
+                    ))
+                )}
+            </div>
         </div>
     );
 };

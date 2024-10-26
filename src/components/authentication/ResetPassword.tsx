@@ -96,7 +96,7 @@ export default function ResetPassword() {
                     </label>
                     <div className="button-container">
                         <button onClick={() => navigate("/login")} className='return-button'>Return</button>
-                        <button type="submit" className="accept-button">Reset Password</button>
+                        <button type="submit" className="green-button">Reset Password</button>
                     </div>
                 </form>
             ) : (
@@ -142,7 +142,7 @@ export default function ResetPassword() {
                     </label>
                     <div className="button-container">
                         <button onClick={() => navigate("/login")} className='return-button'>Return</button>
-                        <button type="submit" className="accept-button">Reset Password</button>
+                        <button type="submit" className="green-button">Reset Password</button>
                     </div>
                 </form>
             )}

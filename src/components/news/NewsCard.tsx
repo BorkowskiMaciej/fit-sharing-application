@@ -4,6 +4,7 @@ import axiosInstance from "../../configuration/axiosConfig";
 import useToken from "../../hooks/useToken";
 import moment from 'moment';
 import {useNavigate} from "react-router-dom";
+import '../../styles/news-card-styles.css';
 
 interface NewsCardProps {
     news: News;
@@ -74,8 +75,8 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, onDelete }) => {
             </div>
             {news.publisherFsUserId === tokenData?.fsUserId && (
                 <div className="action-container">
-                    <div className="action-icon-container" onClick={() => setShowActions(!showActions)}>
-                        <svg className="action-icon" viewBox="0 0 24 6" fill="currentColor">
+                    <div onClick={() => setShowActions(!showActions)}>
+                        <svg viewBox="0 0 24 6" fill="currentColor">
                             <circle cx="3" cy="3" r="2.5" />
                             <circle cx="12" cy="3" r="2.5" />
                             <circle cx="21" cy="3" r="2.5" />

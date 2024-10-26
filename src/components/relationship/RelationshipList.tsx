@@ -52,62 +52,64 @@ const RelationshipList = () => {
     }, [query]);
 
     return (
-        <div className="user-list-container">
-            {receivedRelationships.length === 0 && sentRelationships.length === 0 && acceptedRelationships.length === 0 ? (
-                <p>No relationships found. Send new invitations!</p>
-            ) : (
-                <div>
-                    {receivedRelationships.length === 0 ? (
-                        <p></p>
-                    ) : (
-                        <div>
-                            <h3>Received invitations</h3>
-                            {receivedRelationships.map(response => (
-                                <UserCard key={response.friendUsername}
-                                          username={response.friendUsername}
-                                          firstName={response.friendFirstName}
-                                          lastName={response.friendLastName}
-                                          fsUserId={response.friendFsUserId}
-                                          profilePicture={response.profilePicture}
-                                />
-                            ))}
-                        </div>
+        <div className="main-component">
+            <div className="list-container">
+                {receivedRelationships.length === 0 && sentRelationships.length === 0 && acceptedRelationships.length === 0 ? (
+                    <p>No relationships found. Send new invitations!</p>
+                ) : (
+                    <div>
+                        {receivedRelationships.length === 0 ? (
+                            <p></p>
+                        ) : (
+                            <div>
+                                <h3>Received invitations</h3>
+                                {receivedRelationships.map(response => (
+                                    <UserCard key={response.friendUsername}
+                                              username={response.friendUsername}
+                                              firstName={response.friendFirstName}
+                                              lastName={response.friendLastName}
+                                              fsUserId={response.friendFsUserId}
+                                              profilePicture={response.profilePicture}
+                                    />
+                                ))}
+                            </div>
 
-                    )}
-                    {sentRelationships.length === 0 ? (
-                        <p></p>
-                    ) : (<div>
-                            <h3>Sent invitations</h3>
-                            {sentRelationships.map(response => (
-                                <UserCard key={response.friendUsername}
-                                          username={response.friendUsername}
-                                          firstName={response.friendFirstName}
-                                          lastName={response.friendLastName}
-                                          fsUserId={response.friendFsUserId}
-                                          profilePicture={response.profilePicture}
-                                />
-                            ))}
-                        </div>
+                        )}
+                        {sentRelationships.length === 0 ? (
+                            <p></p>
+                        ) : (<div>
+                                <h3>Sent invitations</h3>
+                                {sentRelationships.map(response => (
+                                    <UserCard key={response.friendUsername}
+                                              username={response.friendUsername}
+                                              firstName={response.friendFirstName}
+                                              lastName={response.friendLastName}
+                                              fsUserId={response.friendFsUserId}
+                                              profilePicture={response.profilePicture}
+                                    />
+                                ))}
+                            </div>
 
-                    )}
-                    {acceptedRelationships.length === 0 ? (
-                        <p></p>
-                    ) : (
-                        <div>
-                            <h3>Friends</h3>
-                            {acceptedRelationships.map(response => (
-                                <UserCard key={response.friendUsername}
-                                          username={response.friendUsername}
-                                          firstName={response.friendFirstName}
-                                          lastName={response.friendLastName}
-                                          fsUserId={response.friendFsUserId}
-                                          profilePicture={response.profilePicture}
-                                />
-                            ))}
-                        </div>
-                    )}
-                </div>
-            )}
+                        )}
+                        {acceptedRelationships.length === 0 ? (
+                            <p></p>
+                        ) : (
+                            <div>
+                                <h3>Friends</h3>
+                                {acceptedRelationships.map(response => (
+                                    <UserCard key={response.friendUsername}
+                                              username={response.friendUsername}
+                                              firstName={response.friendFirstName}
+                                              lastName={response.friendLastName}
+                                              fsUserId={response.friendFsUserId}
+                                              profilePicture={response.profilePicture}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

@@ -244,9 +244,9 @@ const EditProfile: React.FC<{ setTokenData: (token: UserToken | null) => void }>
                     </label>
                     <div className="button-container">
                         <button onClick={() => navigate("/me")} className='return-button'>Return</button>
-                        <button type="submit" className='update-button'>Update profile</button>
+                        <button type="submit" className='green-button'>Update profile</button>
                     </div>
-                    <button onClick={handleUserDelete} className='delete-user-button'>Delete account</button>
+                    <button onClick={handleUserDelete} className='red-button'>Delete account</button>
                 </form>
             )}
         </div>

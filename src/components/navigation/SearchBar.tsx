@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../../styles/search-bar-styles.css';
 
 const SearchBar: React.FC = () => {
     const [input, setInput] = useState('');

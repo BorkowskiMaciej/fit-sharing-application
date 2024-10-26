@@ -3,6 +3,7 @@ import {CreateNewsRequest, SportCategory} from '../../types';
 import axiosInstance from "../../configuration/axiosConfig";
 import {createNews, getFriends} from "../../services/NewsService";
 import {encryptData, importPublicKey} from "../../utils/cryptoUtils";
+import '../../styles/create-news-styles.css';
 
 interface CreateNewsComponentProps {
     onSubmit: () => void;

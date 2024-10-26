@@ -117,7 +117,7 @@ export default function ChangePassword() {
                 </label>
                 <div className="button-container">
                     <button onClick={() => navigate("/me")} className='return-button'>Return</button>
-                    <button type="submit" className="accept-button">Change password</button>
+                    <button type="submit" className="green-button">Change password</button>
                 </div>
             </form>
         </div>

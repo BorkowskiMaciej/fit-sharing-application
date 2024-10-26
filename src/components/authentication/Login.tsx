@@ -111,7 +111,7 @@ export default function Login({ setToken }: LoginProps) {
                             onChange={e => setPassword(e.target.value)}
                         />
                     </label>
-                    <button type="submit" className='accept-button' style={{ alignSelf: 'flex-end', width: '150px'}}>Log in</button>
+                    <button type="submit" className='green-button' style={{ alignSelf: 'flex-end', width: '150px'}}>Log in</button>
                 </form>
                 <div>
                     <Link to="/register">Need an account?</Link>

@@ -5,6 +5,7 @@ import NewsList from "../news/NewsList";
 import {useRelationship} from "../../hooks/useRelationship";
 import {useFetchUser} from "../../hooks/useFetchUser";
 import UserProfileInfo from "./UserProfileInfo";
+import '../../styles/user-profile-styles.css';
 
 const FriendProfile: React.FC = () => {
     const { uuid } = useParams<{ uuid: string }>();
@@ -30,8 +31,8 @@ const FriendProfile: React.FC = () => {
         <div className='user-button-container'>
             {relationshipStatus === 'ACCEPTED' && (
                 <div className="remove-user-container">
-                    <div className="action-icon-container" onClick={() => setShowActions(!showActions)}>
-                        <svg className="action-icon" viewBox="0 0 24 6" fill="currentColor">
+                    <div onClick={() => setShowActions(!showActions)}>
+                        <svg viewBox="0 0 24 6" fill="currentColor">
                             <circle cx="3" cy="3" r="2.5" />
                             <circle cx="12" cy="3" r="2.5" />
                             <circle cx="21" cy="3" r="2.5" />
@@ -45,14 +46,14 @@ const FriendProfile: React.FC = () => {
                 </div>
             )}
             {relationshipStatus === 'PENDING' && authorizedFsUserId === senderFsUserId && (
-                <button className="relationship-button reject-button" onClick={deleteInvitation}>Delete invitation</button>
+                <button className="relationship-button red-button" onClick={deleteInvitation}>Delete invitation</button>
             )}
             {relationshipStatus === 'PENDING' && !(authorizedFsUserId === senderFsUserId) && (
                 <div className="buttons-container">
-                    <button className="relationship-button accept-button" onClick={acceptInvitation}>
+                    <button className="relationship-button green-button" onClick={acceptInvitation}>
                         Accept invitation
                     </button>
-                    <button className="relationship-button reject-button" onClick={rejectInvitation}>
+                    <button className="relationship-button red-button" onClick={rejectInvitation}>
                         Reject invitation
                     </button>
                 </div>

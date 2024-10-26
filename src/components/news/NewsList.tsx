@@ -36,7 +36,7 @@ const NewsList: React.FC<NewsListProps> = ({ url, refreshKey }) => {
     }, [tokenData, url, refreshKey]);
 
     return (
-        <div className="news-list-container">
+        <div className="list-container">
             {newsList.length === 0 ? (
                 <p>No news found. Send new invitations!</p>
             ) : (
