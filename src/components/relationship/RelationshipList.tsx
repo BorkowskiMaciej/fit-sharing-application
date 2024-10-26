@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axiosInstance from '../configuration/axiosConfig';
+import axiosInstance from '../../configuration/axiosConfig';
 import { useParams } from 'react-router-dom';
-import { RelationshipResponse } from '../types';
-import UserCard from "./user/UserCard";
+import { RelationshipResponse } from '../../types';
+import UserCard from "../user/UserCard";
 
 const RelationshipList = () => {
     const { query } = useParams();

@@ -14,6 +14,7 @@ const NavBar: React.FC<{ setTokenData: (token: UserToken | null) => void }> = ({
 
     return (
         <>
+            <GlobalMessages />
             <div className="navbar-section">
                 <h2 className="navbar-title">Fit Sharing</h2>
                 <div className="icon-container" onClick={() => navigate("/")}>
@@ -23,9 +24,6 @@ const NavBar: React.FC<{ setTokenData: (token: UserToken | null) => void }> = ({
                     <span>Home</span>
                 </div>
                 <SearchBar />
-            </div>
-            <div className="global-message">
-                <GlobalMessages />
             </div>
             <div className="navbar-section">
                 <div className="icon-container" onClick={() => navigate("/friends")}>

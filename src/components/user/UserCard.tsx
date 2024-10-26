@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
-import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../configuration/axiosConfig";
+import React from "react";
+import {useNavigate} from "react-router-dom";
 import useToken from "../../hooks/useToken";
+import {useRelationship} from "../../hooks/useRelationship";
 
 interface UserCardProps {
     username: string,
@@ -14,70 +14,17 @@ interface UserCardProps {
 const UserCard: React.FC<UserCardProps> = ({ username, firstName, lastName, fsUserId, profilePicture}) => {
     const navigate = useNavigate();
     const defaultPhoto = '/user-photo.jpg';
-    const [relationshipStatus, setRelationshipStatus] = useState('');
-    const [senderFsUserId, setSenderFsUserId] = useState('');
-    const [relationshipId, setRelationshipId] = useState('');
     const { tokenData } = useToken();
     const authorizedFsUserId = tokenData?.fsUserId;
 
-    const fetchRelationship = async (fsUserId: string) => {
-        try {
-            const response = await axiosInstance.get(`/relationships/${fsUserId}`);
-            setRelationshipStatus(response.data.status);
-            setSenderFsUserId(response.data.sender);
-            setRelationshipId(response.data.id);
-        } catch (error) {
-            console.error('Failed to fetch relationship status:', error);
-            setRelationshipStatus("NOT_FOUND");
-        }
-    };
-
-    useEffect(() => {
-        fetchRelationship(fsUserId);
-    }, [fsUserId]);
-
-    const handleInvite = async () => {
-        try {
-            await axiosInstance.post(`/relationships/send/${fsUserId}`);
-            window.dispatchEvent(new CustomEvent('showMessage',
-                { detail: { message: 'Invitation was sent', type: 'green' } }));
-            fetchRelationship(fsUserId);
-        } catch (error) {
-            console.error('Failed to send invitation:', error);
-        }
-    };
-
-    const handleDeleteInvitation = async () => {
-        try {
-            await axiosInstance.delete(`/relationships/delete/${relationshipId}`);
-            window.dispatchEvent(new CustomEvent('showMessage',
-                { detail: { message: 'Invitation was deleted', type: 'green' } }));
-            fetchRelationship(fsUserId);
-        } catch (error) {
-            console.error('Failed to delete invitation:', error);
-        }
-    };
-
-    const handleAcceptInvitation = async () => {
-        try {
-            await axiosInstance.post(`/relationships/accept/${relationshipId}`);
-            window.dispatchEvent(new CustomEvent('showMessage',
-                { detail: { message: 'Invitation was accepted', type: 'green' } }));
-            fetchRelationship(fsUserId);
-        } catch (error) {
-        }
-    };
-
-    const handleRejectInvitation = async () => {
-        try {
-            await axiosInstance.post(`/relationships/reject/${relationshipId}`);
-            window.dispatchEvent(new CustomEvent('showMessage',
-                { detail: { message: 'Invitation was rejected', type: 'green' } }));
-            fetchRelationship(fsUserId);
-        } catch (error) {
-            console.error('Failed to delete invitation:', error);
-        }
-    };
+    const {
+        relationshipStatus,
+        senderFsUserId,
+        sendInvite,
+        deleteInvitation,
+        acceptInvitation,
+        rejectInvitation
+    } = useRelationship({ fsUserId });
 
     return (
         <div className="user-card-container">
@@ -89,20 +36,20 @@ const UserCard: React.FC<UserCardProps> = ({ username, firstName, lastName, fsUs
                 </div>
             </div>
                 {relationshipStatus === 'PENDING' && authorizedFsUserId === senderFsUserId && (
-                    <button className="relationship-button reject-button" onClick={handleDeleteInvitation}>Delete invitation</button>
+                    <button className="relationship-button reject-button" onClick={deleteInvitation}>Delete invitation</button>
                 )}
                 {relationshipStatus === 'PENDING' && !(authorizedFsUserId === senderFsUserId) && (
                     <div className="buttons-container">
-                        <button className="relationship-button accept-button" onClick={handleAcceptInvitation}>
+                        <button className="relationship-button accept-button" onClick={acceptInvitation}>
                             Accept invitation
                         </button>
-                        <button className="relationship-button reject-button" onClick={handleRejectInvitation}>
+                        <button className="relationship-button reject-button" onClick={rejectInvitation}>
                             Reject invitation
                         </button>
                     </div>
                 )}
                 {(relationshipStatus === 'NOT_FOUND' || relationshipStatus === 'REJECTED') && (
-                    <button className="relationship-button invite-button" onClick={handleInvite}>Send invitation</button>
+                    <button className="relationship-button invite-button" onClick={sendInvite}>Send invitation</button>
                 )}
         </div>
     );

@@ -6,13 +6,13 @@ import UserList from "./components/user/UserList";
 import Login from "./components/authentication/Login";
 import useToken from "./hooks/useToken";
 import Register from "./components/authentication/Register";
-import RelationshipList from "./components/RelationshipList";
-import ReceivedNewsList from "./components/news/ReceivedNewsList";
+import RelationshipList from "./components/relationship/RelationshipList";
 import FriendProfile from "./components/user/FriendProfile";
 import MyProfile from "./components/user/MyProfile";
 import EditProfile from "./components/user/EditProfile";
 import ResetPassword from "./components/authentication/ResetPassword";
 import ChangePassword from "./components/user/ChangePassword";
+import {MainComponent} from "./components/MainComponent";
 
 const App: React.FC = () => {
     const { tokenData, setTokenData } = useToken();
@@ -43,7 +43,7 @@ const App: React.FC = () => {
                     <Route path="/me/change-password" element={<ChangePassword />} />
                     <Route path="/search/:query" element={<UserList />} />
                     <Route path="/friends" element={<RelationshipList />} />
-                    <Route path="/" element={<ReceivedNewsList />} />
+                    <Route path="/" element={<MainComponent />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             </div>

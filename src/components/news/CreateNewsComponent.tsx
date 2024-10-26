@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import {CreateNewsRequest, News, SportCategory} from '../../types';
-import NewsCard from './NewsCard';
+import React, {useState} from 'react';
+import {CreateNewsRequest, SportCategory} from '../../types';
 import axiosInstance from "../../configuration/axiosConfig";
 import {createNews, getFriends} from "../../services/NewsService";
-import {decryptNews, encryptData, getPrivateKey, importPublicKey} from "../../utils/cryptoUtils";
-import useToken from "../../hooks/useToken";
+import {encryptData, importPublicKey} from "../../utils/cryptoUtils";
 
 interface CreateNewsComponentProps {
     onSubmit: () => void;
@@ -35,7 +33,7 @@ const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({ onSubmit }) =
         });
 
         try {
-            const myPublicKey = await importPublicKey((await axiosInstance.get('/keys')).data.publicKey);
+            const myPublicKey = await importPublicKey((await axiosInstance.get('/keys/my')).data.publicKey);
             const encryptedReferenceNewsData = await encryptData(myPublicKey, data);
             const referenceNewsId = await axiosInstance.post('/news/reference', {
                 data: encryptedReferenceNewsData
@@ -134,46 +132,4 @@ const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({ onSubmit }) =
     );
 };
 
-const MyNewsComponent = () => {
-    const [newsList, setNewsList] = useState<News[]>([]);
-    const { tokenData } = useToken();
-
-    const fetchNews = async () => {
-        try {
-            const publishedNews = await axiosInstance.get(`/news/reference`).then(response => response.data);
-            const privateKey = await getPrivateKey(tokenData?.fsUserId);
-            if (privateKey) {
-                const decryptedNews = await decryptNews(publishedNews, privateKey);
-                setNewsList(decryptedNews);
-            } else {
-                setNewsList(publishedNews);
-            }
-        } catch (error) {
-            console.error('Failed to fetch news:', error);
-        }
-    };
-
-    useEffect(() => {
-        if (tokenData) {
-            fetchNews();
-        }
-    }, [tokenData]);
-
-    return (
-        <>
-            <CreateNewsComponent onSubmit={fetchNews}/>
-            <div className="news-list">
-                {newsList.length === 0 ? (
-                    <p>No published news. Send your first post!</p>
-                ) : (
-                    newsList.map(news => (
-                        <NewsCard key={news.id} news={news} onDelete={fetchNews}/>
-                    ))
-                )}
-            </div>
-        </>
-
-    );
-};
-
-export default MyNewsComponent;
+export default CreateNewsComponent;

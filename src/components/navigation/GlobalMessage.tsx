@@ -5,15 +5,29 @@ interface MessageEventDetail {
     type: 'success' | 'error' | 'info';
 }
 
+interface Message {
+    id: number;
+    message: string;
+    type: 'success' | 'error' | 'info';
+}
+
 const GlobalMessages: React.FC = () => {
-    const [message, setMessage] = useState<string>('');
-    const [messageType, setMessageType] = useState<'success' | 'error' | 'info'>('info');
+    const [messages, setMessages] = useState<Message[]>([]);
 
     useEffect(() => {
         const handleMessage = (event: CustomEvent<MessageEventDetail>) => {
-            setMessage(event.detail.message);
-            setMessageType(event.detail.type);
-            setTimeout(() => setMessage(''), 3000);
+            const newMessage: Message = {
+                id: Date.now(),
+                message: event.detail.message,
+                type: event.detail.type
+            };
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+
+            setTimeout(() => {
+                setMessages((prevMessages) =>
+                    prevMessages.filter((msg) => msg.id !== newMessage.id)
+                );
+            }, 3000);
         };
 
         window.addEventListener('showMessage', handleMessage as EventListener);
@@ -23,11 +37,13 @@ const GlobalMessages: React.FC = () => {
         };
     }, []);
 
-    if (!message) return null;
-
     return (
-        <div className={`global-message ${messageType}`}>
-            {message}
+        <div className="global-messages-container">
+            {messages.map(({ id, message, type }) => (
+                <div key={id} className={`global-message ${type}`}>
+                    {message}
+                </div>
+            ))}
         </div>
     );
 };
