@@ -27,7 +27,6 @@ export interface News {
     publisherUsername: string;
     publisherProfilePicture: string;
     receiverFsUserId: string;
-    receiverUsername: string;
     data: string;
     createdAt: string;
 }

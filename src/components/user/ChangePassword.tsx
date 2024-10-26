@@ -62,7 +62,7 @@ export default function ChangePassword() {
             if (error instanceof AxiosError) {
                 if (error.response && error.response.data) {
                     switch (error.response.data.code) {
-                        case "SERVICE-0029":
+                        case "SERVICE-1004":
                             setCurrentPasswordError(error.response.data.message);
                             break;
                         default:

@@ -28,7 +28,7 @@ export default function ResetPassword() {
             if (error instanceof AxiosError) {
                 if (error.response && error.response.data) {
                     switch (error.response.data.code) {
-                        case "SERVICE-0001":
+                        case "SERVICE-1001":
                             setErrorMessage('User with this email address was not found.');
                             break;
                         default:
@@ -65,7 +65,7 @@ export default function ResetPassword() {
             if (error instanceof AxiosError) {
                 if (error.response && error.response.data) {
                     switch (error.response.data.code) {
-                        case "SERVICE-0027":
+                        case "SERVICE-0012":
                             setCodeError(error.response.data.message);
                             break;
                         default:

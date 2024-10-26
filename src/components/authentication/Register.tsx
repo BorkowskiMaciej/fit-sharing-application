@@ -136,10 +136,10 @@ export default function Register() {
             if (error instanceof AxiosError) {
                 if (error.response && error.response.data) {
                     switch (error.response.data.code) {
-                        case "SERVICE-0002":
+                        case "SERVICE-1002":
                             setUsernameError(error.response.data.message)
                             break;
-                        case "SERVICE-0003":
+                        case "SERVICE-1003":
                             setEmailError(error.response.data.message)
                             break;
                         default:
