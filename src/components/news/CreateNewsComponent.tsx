@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
-import {CreateNewsRequest, SportCategory} from '../../types';
+import {CreateNewsRequest, News, SportCategory} from '../../types';
 import axiosInstance from "../../configuration/axiosConfig";
-import {createNews, getFriends} from "../../services/NewsService";
 import {encryptData, importPublicKey} from "../../utils/cryptoUtils";
 import '../../styles/create-news-styles.css';
 
@@ -40,7 +39,9 @@ const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({ onSubmit }) =
                 data: encryptedReferenceNewsData
             }).then(response => response.data.id);
 
-            const createNewsPromises = (await getFriends()).map(async (responseData: responseData) => {
+            const createNewsPromises = (await axiosInstance.get(`/relationships/friends`)
+                .then(response => response.data))
+                .map(async (responseData: responseData) => {
                 const publicKey = await importPublicKey(responseData.publicKey);
                 const encryptedNewsData = await encryptData(publicKey, data);
 
@@ -50,7 +51,7 @@ const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({ onSubmit }) =
                     receiverDeviceId: responseData.deviceId,
                     data: encryptedNewsData
                 };
-                return createNews(newsRequest);
+                return axiosInstance.post<News>(`/news`, newsRequest).then(response => response.data)
             });
 
             await Promise.all(createNewsPromises);
