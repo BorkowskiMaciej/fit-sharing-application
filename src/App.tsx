@@ -42,7 +42,7 @@ const App: React.FC = () => {
                     <Route path="/me/edit" element={<EditProfile setTokenData={setTokenData}/>} />
                     <Route path="/me/change-password" element={<ChangePassword />} />
                     <Route path="/search/:query" element={<UserList />} />
-                    <Route path="/friends" element={<RelationshipList />} />
+                    <Route path="/relationships" element={<RelationshipList />} />
                     <Route path="/" element={<MainComponent />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
