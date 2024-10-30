@@ -18,24 +18,25 @@ export default function ResetPassword() {
 
     const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         try {
-            await axiosInstance.post('/auth/reset-password-request', {email});
-            setEmailSent(true);
-            setMessage('A reset code has been sent to your email. The code is valid for 1 minute.');
-            setTimeout(() => setMessage(''), 5000);
+            await axiosInstance
+                .post('/auth/reset-password-request', {email})
+                .then(() => {
+                    setEmailSent(true);
+                    setMessage('A reset code has been sent to your email. The code is valid for 1 minute.');
+                    setTimeout(() => setMessage(''), 5000);
+                });
         } catch (error) {
-            console.error('Registration failed:', error);
-            if (error instanceof AxiosError) {
-                if (error.response && error.response.data) {
-                    switch (error.response.data.code) {
-                        case "SERVICE-1001":
-                            setErrorMessage('User with this email address was not found.');
-                            break;
-                        default:
-                            setErrorMessage(error.response.data.message || 'Failed to send reset password. Please try again.');
-                    }
-                    setTimeout(() => setErrorMessage(''), 5000);
+            if (error instanceof AxiosError && error.response?.data) {
+                switch (error.response.data.code) {
+                    case "SERVICE-1001":
+                        setErrorMessage('User with this email address was not found.');
+                        break;
+                    default:
+                        setErrorMessage(error.response.data.message || 'Failed to send reset password. Please try again.');
                 }
+                setTimeout(() => setErrorMessage(''), 5000);
             }
         }
     };
@@ -58,21 +59,25 @@ export default function ResetPassword() {
         }
 
         try {
-            await axiosInstance.post('/auth/reset-password', { email: email, code: resetCode, newPassword: newPassword });
-            navigate('/login', { state: { message: 'Successfully reset the password. Please log in.' } });
+            await axiosInstance
+                .post('/auth/reset-password', {
+                    email: email,
+                    code: resetCode,
+                    newPassword: newPassword
+                })
+                .then(() => navigate('/login',
+                    { state: { message: 'Successfully reset the password. Please log in.' } }
+                ));
         } catch (error) {
-            console.error('Error resetting password:', error);
-            if (error instanceof AxiosError) {
-                if (error.response && error.response.data) {
-                    switch (error.response.data.code) {
-                        case "SERVICE-0012":
-                            setCodeError(error.response.data.message);
-                            break;
-                        default:
-                            setErrorMessage(error.response.data.message || 'Failed to send reset email. Please try again.');
-                    }
-                    setTimeout(() => setErrorMessage(''), 5000);
+            if (error instanceof AxiosError && error.response?.data) {
+                switch (error.response.data.code) {
+                    case "SERVICE-0012":
+                        setCodeError(error.response.data.message);
+                        break;
+                    default:
+                        setErrorMessage(error.response.data.message || 'Failed to send reset email. Please try again.');
                 }
+                setTimeout(() => setErrorMessage(''), 5000);
             }
         }
     };

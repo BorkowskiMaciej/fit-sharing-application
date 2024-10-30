@@ -13,8 +13,9 @@ const RelationshipList = () => {
     useEffect(() => {
         const fetchAcceptedRelationships = async () => {
             try {
-                const response = await axiosInstance.get(`/relationships/accepted`);
-                setAcceptedRelationships(response.data);
+                await axiosInstance
+                    .get(`/relationships/accepted`)
+                    .then(response => setAcceptedRelationships(response.data));
             } catch (error) {
                 console.error('Error fetching users', error);
             }
@@ -22,8 +23,9 @@ const RelationshipList = () => {
 
         const fetchSentRelationships = async () => {
             try {
-                const response = await axiosInstance.get(`/relationships/sent`);
-                setSentRelationships(response.data);
+                await axiosInstance
+                    .get(`/relationships/sent`)
+                    .then(response => setSentRelationships(response.data));
             } catch (error) {
                 console.error('Error fetching users', error);
             }
@@ -31,8 +33,9 @@ const RelationshipList = () => {
 
         const fetchReceivedRelationships = async () => {
             try {
-                const response = await axiosInstance.get(`/relationships/received`);
-                setReceivedRelationships(response.data);
+                await axiosInstance
+                    .get(`/relationships/received`)
+                    .then(response => setReceivedRelationships(response.data));
             } catch (error) {
                 console.error('Error fetching users', error);
             }
@@ -42,13 +45,13 @@ const RelationshipList = () => {
         fetchSentRelationships();
         fetchReceivedRelationships();
 
-        const interval = setInterval(() => {
-            fetchAcceptedRelationships()
-            fetchSentRelationships()
-            fetchReceivedRelationships();
-        }, 3000);
+        // const interval = setInterval(() => {
+        //     fetchAcceptedRelationships()
+        //     fetchSentRelationships()
+        //     fetchReceivedRelationships();
+        // }, 3000);
 
-        return () => {clearInterval(interval)};
+        // return () => {clearInterval(interval)};
     }, [query]);
 
     return (

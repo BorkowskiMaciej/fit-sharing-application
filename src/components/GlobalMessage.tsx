@@ -7,9 +7,10 @@ interface MessageEventDetail {
 }
 
 interface Message {
-    id: number;
+    id: string;
     message: string;
     type: 'success' | 'error' | 'info';
+    isVisible: boolean;
 }
 
 const GlobalMessages: React.FC = () => {
@@ -18,17 +19,26 @@ const GlobalMessages: React.FC = () => {
     useEffect(() => {
         const handleMessage = (event: CustomEvent<MessageEventDetail>) => {
             const newMessage: Message = {
-                id: Date.now(),
+                id: crypto.randomUUID(),
                 message: event.detail.message,
-                type: event.detail.type
+                type: event.detail.type,
+                isVisible: true
             };
             setMessages((prevMessages) => [...prevMessages, newMessage]);
 
             setTimeout(() => {
                 setMessages((prevMessages) =>
-                    prevMessages.filter((msg) => msg.id !== newMessage.id)
+                    prevMessages.map((msg) =>
+                        msg.id === newMessage.id ? { ...msg, isVisible: false } : msg
+                    )
                 );
             }, 3000);
+
+            setTimeout(() => {
+                setMessages((prevMessages) =>
+                    prevMessages.filter((msg) => msg.id !== newMessage.id)
+                );
+            }, 3400);
         };
 
         window.addEventListener('showMessage', handleMessage as EventListener);
@@ -40,8 +50,11 @@ const GlobalMessages: React.FC = () => {
 
     return (
         <div className="global-messages-container">
-            {messages.map(({ id, message, type }) => (
-                <div key={id} className={`global-message ${type}`}>
+            {messages.map(({ id, message, type, isVisible }) => (
+                <div
+                    key={id}
+                    className={`global-message ${type} ${isVisible ? 'show' : 'hide'}`}
+                >
                     {message}
                 </div>
             ))}

@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../provider/authProvider";
 import {useRelationship} from "../../hooks/useRelationship";
 import '../../styles/user-card-styles.css';
+import {DEFAULT_USER_PHOTO} from "../../constants";
 
 interface UserCardProps {
     username: string,
@@ -14,7 +15,6 @@ interface UserCardProps {
 
 const UserCard: React.FC<UserCardProps> = ({ username, firstName, lastName, fsUserId, profilePicture}) => {
     const navigate = useNavigate();
-    const defaultPhoto = '/user-photo.jpg';
     const { tokenData } = useAuth();
     const authorizedFsUserId = tokenData?.fsUserId;
 
@@ -30,7 +30,7 @@ const UserCard: React.FC<UserCardProps> = ({ username, firstName, lastName, fsUs
     return (
         <div className="user-card-container">
             <div style={{ display: 'flex', alignItems: 'center' }} onClick={() => navigate(`/user/${fsUserId}`)}>
-                <img src={profilePicture ? profilePicture : defaultPhoto} alt="" className="user-mini-photo" />
+                <img src={profilePicture ? profilePicture : DEFAULT_USER_PHOTO} alt="" className="user-mini-photo" />
                 <div className="user-mini-info">
                     <h2 style={{ textAlign: 'left'}}>{username}</h2>
                     <p>{firstName} {lastName}</p>

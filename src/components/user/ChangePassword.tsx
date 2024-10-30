@@ -3,20 +3,6 @@ import axiosInstance from '../../configuration/axiosConfig';
 import { AxiosError } from "axios";
 import { useNavigate } from 'react-router-dom';
 
-type ChangePasswordRequest = {
-    currentPassword: string;
-    newPassword: string;
-};
-
-async function changePassword(credentials: ChangePasswordRequest) {
-    try {
-        return await axiosInstance.patch('/users/password', credentials);
-    } catch (error: any) {
-        console.error('Error changing password:', error.message);
-        throw error;
-    }
-}
-
 export default function ChangePassword() {
     const [currentPassword, setCurrentPassword] = useState<string | undefined>();
     const [newPassword, setNewPassword] = useState<string | undefined>();
@@ -45,31 +31,26 @@ export default function ChangePassword() {
         }
 
         try {
-            const response = await changePassword({
-                currentPassword: currentPassword || '',
-                newPassword: newPassword || '',
-            });
-
-            if (response.status === 200) {
-                window.dispatchEvent(new CustomEvent('showMessage',
-                    {detail: {message: 'Password changed successfully.', type: 'green'}}));
-                navigate('/me');
-            } else {
-                throw new Error(`Unexpected response status: ${response.status}`);
-            }
+            await axiosInstance
+                .patch('/users/password', {
+                    currentPassword: currentPassword,
+                    newPassword: newPassword,
+                })
+                .then(() => {
+                    window.dispatchEvent(new CustomEvent('showMessage',
+                        {detail: {message: 'Password changed successfully.', type: 'green'}}));
+                    navigate('/me');
+                });
         } catch (error) {
-            console.error('Change password failed:', error);
-            if (error instanceof AxiosError) {
-                if (error.response && error.response.data) {
-                    switch (error.response.data.code) {
-                        case "SERVICE-1004":
-                            setCurrentPasswordError(error.response.data.message);
-                            break;
-                        default:
-                            setErrorMessage(error.response.data.message || 'Failed to change password. Please try again.');
-                    }
-                    setTimeout(() => setErrorMessage(''), 5000);
+            if (error instanceof AxiosError && error.response?.data) {
+                switch (error.response.data.code) {
+                    case "SERVICE-1004":
+                        setCurrentPasswordError(error.response.data.message);
+                        break;
+                    default:
+                        setErrorMessage(error.response.data.message || 'Failed to change password. Please try again.');
                 }
+                setTimeout(() => setErrorMessage(''), 5000);
             }
         }
     };

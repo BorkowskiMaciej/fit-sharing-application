@@ -1,26 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-
 import axiosInstance from '../../configuration/axiosConfig';
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {AxiosError} from "axios";
 import {generateDeviceId, getDeviceId, saveDeviceId} from "../../utils/loginUtils";
 import {exportPublicKey, generateKeyPair, savePrivateKey} from "../../utils/cryptoUtils";
 import {useAuth} from "../../provider/authProvider";
-
-type LoginCredentials = {
-    username: string;
-    password: string;
-};
-
-async function loginUser(credentials: LoginCredentials) {
-    try {
-        return await axiosInstance.post('/auth/login', credentials);
-    } catch (error: any) {
-        console.error('Error during login:', error.message);
-        throw error;
-    }
-}
 
 export default function Login() {
     const [username, setUserName] = useState<string | undefined>();
@@ -29,9 +14,58 @@ export default function Login() {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const navigate = useNavigate();
     const { setTokenData } = useAuth();
-
     const location = useLocation();
     const locationMessage = location.state?.message;
+
+    const handleLoginError = (error: unknown) => {
+        let message = 'An unexpected error occurred. Please try again later.';
+        if (error instanceof AxiosError && error.response?.data) {
+            switch (error.response.data.code) {
+                case "SERVICE-0009":
+                    message = 'Invalid credentials. Please try again.';
+                    break;
+            }
+        }
+        setErrorMessage(message);
+    };
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        try {
+            const response = await axiosInstance.post('/auth/login',{
+                username: username,
+                password: password,
+            });
+            if (response.status === 200) {
+                setTokenData({
+                    fsUserId: response.data.fsUserId,
+                    token: response.data.token,
+                    expiresIn: response.data.expiresIn
+                });
+                let deviceId = await getDeviceId(response.data.fsUserId);
+                if (!deviceId) {
+                    deviceId = generateDeviceId();
+                    const keyPair = await generateKeyPair();
+                    const publicKey = await exportPublicKey(keyPair.publicKey);
+                    await axiosInstance
+                        .post('/keys', {
+                            publicKey: publicKey,
+                            deviceId: deviceId
+                        })
+                        .then(() => {
+                            savePrivateKey(keyPair.privateKey, response.data.fsUserId);
+                            saveDeviceId(deviceId, response.data.fsUserId);
+                        });
+
+                }
+                sessionStorage.setItem('deviceId', deviceId);
+                navigate('/');
+            }
+        } catch (error) {
+            handleLoginError(error);
+        }
+    };
 
     useEffect(() => {
         if (locationMessage) {
@@ -39,49 +73,6 @@ export default function Login() {
             setTimeout(() => setMessage(''), 5000);
         }
     }, [locationMessage]);
-
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        try {
-            const response = await loginUser({
-                username: username || '',
-                password: password || '',
-            });
-            if (response.status === 200) {
-                setTokenData({ fsUserId: response.data.fsUserId, token: response.data.token, expiresIn: response.data.expiresIn });
-            } else {
-                throw new Error(`Unexpected response status: ${response.status}`);
-            }
-
-            let deviceId = await getDeviceId(response.data.fsUserId);
-            if (!deviceId) {
-                deviceId = generateDeviceId();
-                const keyPair = await generateKeyPair();
-                const publicKey = await exportPublicKey(keyPair.publicKey);
-                const keyResponse = await axiosInstance.post('/keys', {
-                    publicKey: publicKey,
-                    deviceId: deviceId
-                });
-                if (keyResponse.status === 201) {
-                    await savePrivateKey(keyPair.privateKey, response.data.fsUserId);
-                    await saveDeviceId(deviceId, response.data.fsUserId);
-                    console.log('Public key saved successfully');
-                }
-                else {
-                    throw new Error('Failed to save public key');
-                }
-            }
-            sessionStorage.setItem('deviceId', deviceId);
-            navigate('/');
-        } catch (error) {
-            console.error('Login failed:', error);
-            if (error instanceof AxiosError) {
-                setErrorMessage('Invalid credentials. Please try again.');
-            }
-        }
-    };
 
     return (
         <>

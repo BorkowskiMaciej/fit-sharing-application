@@ -10,9 +10,12 @@ export const useFetchUser = (fsUserId?: string) => {
         const fetchUser = async () => {
             try {
                 const url = fsUserId ? `/users/${fsUserId}` : `/users/me`;
-                const response = await axiosInstance.get(url);
-                setUser(response.data);
-                setError(null);
+                await axiosInstance
+                    .get(url)
+                    .then(response => {
+                        setUser(response.data)
+                        setError(null);
+                    });
             } catch (err) {
                 setError('User not found or error occurred');
                 setUser(null);

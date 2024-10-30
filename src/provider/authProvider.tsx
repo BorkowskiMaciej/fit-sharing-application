@@ -1,5 +1,6 @@
 import React, {createContext, ReactNode, useContext, useEffect, useMemo, useState} from "react";
 import {UserToken} from "../types";
+import {setupAxiosInterceptors} from "../configuration/axiosConfig";
 
 interface AuthContextType {
     tokenData: UserToken | null;
@@ -15,10 +16,17 @@ interface AuthProviderProps {
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [tokenData, setToken] = useState<UserToken | null>(null);
 
+    const logout = () => {
+        sessionStorage.removeItem("token");
+        setToken(null);
+    };
+
     useEffect(() => {
         const tokenString = sessionStorage.getItem('token');
         const userToken: UserToken | null = tokenString ? JSON.parse(tokenString) : null;
         setTokenData(userToken);
+
+        setupAxiosInterceptors(logout);
     }, []);
 
     const setTokenData = (userToken: UserToken | null) => {

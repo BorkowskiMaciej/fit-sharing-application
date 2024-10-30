@@ -5,6 +5,7 @@ import {useAuth} from "../../provider/authProvider";
 import moment from 'moment';
 import {useNavigate} from "react-router-dom";
 import '../../styles/news-card-styles.css';
+import {DEFAULT_USER_PHOTO} from "../../constants";
 
 interface NewsCardProps {
     news: News;
@@ -22,7 +23,6 @@ const parseNewsData = (data: string) => {
             distance: parsedData.distance
         };
     } catch (error) {
-        console.error("Failed to parse news data:", error);
         return { category: "", content: "", kcal: 0, time: "00:00", distance: 0 };
     }
 };
@@ -35,22 +35,19 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, onDelete }) => {
 
     const handleDelete = async () => {
         try {
-            const response = await axiosInstance.delete(`/news/${news.id}`);
-            if (response.status === 204) {
-                onDelete();
-                window.dispatchEvent(new CustomEvent('showMessage', {
-                    detail: { message: 'Deleted successfully.', type: 'green' }
-                }));
-            } else {
-                window.dispatchEvent(new CustomEvent('showMessage', {
-                    detail: { message: 'Failed to delete.', type: 'red' }
-                }));
-            }
+            await axiosInstance
+                .delete(`/news/${news.id}`)
+                .then(() => {
+                    onDelete();
+                    window.dispatchEvent(new CustomEvent('showMessage', {
+                        detail: { message: 'Deleted successfully.', type: 'green' }
+                    }));
+                });
         } catch (error) {
-            console.error('Error:', error);
-        }
+            window.dispatchEvent(new CustomEvent('showMessage', {
+                detail: { message: 'Failed to delete.', type: 'red' }
+            }));        }
     };
-    const defaultPhoto = '/user-photo.jpg';
 
     return (
         <div className="news-card">
@@ -61,7 +58,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, onDelete }) => {
                     } else {
                         navigate(`/user/${news.publisherFsUserId}`);
                     }}}>
-                    <img src={news.publisherProfilePicture ? news.publisherProfilePicture : defaultPhoto} alt="" className="user-mini-mini-photo" />
+                    <img src={news.publisherProfilePicture ? news.publisherProfilePicture : DEFAULT_USER_PHOTO} alt="" className="user-mini-mini-photo" />
                     <h4>{news.publisherUsername}</h4>
                 </div>
                 <p className="news-category">{category}</p>

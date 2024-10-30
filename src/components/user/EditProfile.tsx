@@ -4,24 +4,27 @@ import {useNavigate} from 'react-router-dom';
 import {User, UserToken} from "../../types";
 import moment from "moment";
 import AvatarEditor from "react-avatar-editor";
-import {useDropzone} from "react-dropzone";
+import {useAvatarUploader} from "../../hooks/useAvatarUploader";
 
 const EditProfile: React.FC<{ setTokenData: (token: UserToken | null) => void }> = ({ setTokenData }) => {
     const [user, setUser] = useState<User | null>(null);
-    const navigate = useNavigate();
     const [firstNameError, setFirstNameError] = useState("");
     const [lastNameError, setLastNameError] = useState("");
     const [descriptionError, setDescriptionError] = useState("");
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [scale, setScale] = useState(1);
     const editorRef = useRef<AvatarEditor | null>(null);
+    const { selectedImage, setSelectedImage, getAvatarAsBase64, getRootProps, getInputProps } = useAvatarUploader();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const loadData = async () => {
             try {
-                const response = await axiosInstance.get(`/users/me`);
-                setUser(response.data);
-                setSelectedImage(response.data.profilePicture)
+                await axiosInstance
+                    .get(`/users/me`)
+                    .then(response => {
+                        setUser(response.data);
+                        setSelectedImage(response.data.profilePicture)
+                    });
             } catch (error) {
                 console.log('Failed to fetch user data', error);
             }
@@ -56,16 +59,16 @@ const EditProfile: React.FC<{ setTokenData: (token: UserToken | null) => void }>
 
         try {
             const profilePictureBase64 = editorRef.current ? await getAvatarAsBase64(editorRef.current) : null;
-
-            const response = await axiosInstance.put(`/users`, {
-                ...user,
-                profilePicture: profilePictureBase64
-            });
-            if (response.status === 200) {
-                window.dispatchEvent(new CustomEvent('showMessage',
-                    {detail: {message: 'Profile updated successfully.', type: 'green'}}));
-                navigate('/me');
-            }
+            await axiosInstance
+                .put(`/users`, {
+                    ...user,
+                    profilePicture: profilePictureBase64
+                })
+                .then(() => {
+                    window.dispatchEvent(new CustomEvent('showMessage',
+                        {detail: {message: 'Profile updated successfully.', type: 'green'}}));
+                    navigate('/me');
+                });
         } catch (error: any) {
             console.error('Error updating user profile:', error.message);
             throw error;
@@ -78,48 +81,21 @@ const EditProfile: React.FC<{ setTokenData: (token: UserToken | null) => void }>
         setUser(prev => prev ? {...prev, [name]: value} : null);
     };
 
-    const getAvatarAsBase64 = (editor: AvatarEditor): Promise<string | null> => {
-        return new Promise((resolve, reject) => {
-            if (editor) {
-                const canvas = editor.getImageScaledToCanvas();
-                const base64Image = canvas.toDataURL();
-                resolve(base64Image);
-            } else {
-                reject(new Error('Editor is not initialized.'));
-            }
-        });
-    };
-
-    const { getRootProps, getInputProps } = useDropzone({
-        accept: {
-            'image/*': ['.jpeg', '.jpg', '.png']
-        },
-        onDrop: (acceptedFiles: File[]) => {
-            if (acceptedFiles && acceptedFiles.length > 0) {
-                setSelectedImage(acceptedFiles[0]);
-            }
-        },
-    });
-
     const handleUserDelete = async () => {
         if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
             try {
-                const response = await axiosInstance.delete(`/users`);
-                if (response.status === 204) {
-                    window.dispatchEvent(new CustomEvent('showMessage', {
-                        detail: {message: 'Account deleted successfully.', type: 'green'}
-                    }));
-                    setTokenData(null);
-                    navigate('/login');
-                } else {
-                    window.dispatchEvent(new CustomEvent('showMessage', {
-                        detail: {message: 'Failed to delete account.', type: 'red'}
-                    }));
-                }
+                await axiosInstance
+                    .delete(`/users`)
+                    .then(() => {
+                        window.dispatchEvent(new CustomEvent('showMessage', {
+                            detail: {message: 'Account deleted successfully.', type: 'green'}
+                        }));
+                        setTokenData(null);
+                        navigate('/login');
+                    });
             } catch (error) {
-                console.error('Error:', error);
                 window.dispatchEvent(new CustomEvent('showMessage', {
-                    detail: {message: 'Error deleting account.', type: 'red'}
+                    detail: {message: 'Failed to delete account.', type: 'red'}
                 }));
             }
         }

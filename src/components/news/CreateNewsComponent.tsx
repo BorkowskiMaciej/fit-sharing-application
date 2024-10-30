@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {CreateNewsRequest, News, SportCategory} from '../../types';
+import {SportCategory} from '../../types';
 import axiosInstance from "../../configuration/axiosConfig";
 import {encryptData, importPublicKey} from "../../utils/cryptoUtils";
 import '../../styles/create-news-styles.css';
@@ -14,15 +14,15 @@ interface responseData {
     deviceId: string;
 }
 
-const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({ onSubmit }) => {
+const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({onSubmit}) => {
     const [newsData, setNewsData] = useState<string>('');
     const [selectedCategory, setSelectedCategory] = useState(SportCategory.RUNNING);
     const [time, setTime] = useState<string>('00:00');
     const [kcal, setKcal] = useState<number>(0);
     const [distance, setDistance] = useState<number>(0);
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
 
         const data = JSON.stringify({
             category: selectedCategory,
@@ -35,26 +35,31 @@ const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({ onSubmit }) =
         try {
             const myPublicKey = await importPublicKey((await axiosInstance.get('/keys/my')).data.publicKey);
             const encryptedReferenceNewsData = await encryptData(myPublicKey, data);
-            const referenceNewsId = await axiosInstance.post('/news/reference', {
-                data: encryptedReferenceNewsData
-            }).then(response => response.data.id);
 
-            const createNewsPromises = (await axiosInstance.get(`/relationships/friends`)
-                .then(response => response.data))
-                .map(async (responseData: responseData) => {
-                const publicKey = await importPublicKey(responseData.publicKey);
-                const encryptedNewsData = await encryptData(publicKey, data);
+            const referenceNewsId = await axiosInstance
+                .post('/news/reference', {
+                    data: encryptedReferenceNewsData
+                })
+                .then(response => response.data.id);
 
-                const newsRequest: CreateNewsRequest = {
-                    referenceNewsId: referenceNewsId,
-                    receiverFsUserId: responseData.fsUserId,
-                    receiverDeviceId: responseData.deviceId,
-                    data: encryptedNewsData
-                };
-                return axiosInstance.post<News>(`/news`, newsRequest).then(response => response.data)
-            });
-
+            const createNewsPromises = (
+                await axiosInstance
+                    .get(`/relationships/friends`)
+                    .then(response => response.data)
+                ).map(async (responseData: responseData) => {
+                    const publicKey = await importPublicKey(responseData.publicKey);
+                    const encryptedNewsData = await encryptData(publicKey, data);
+                    return axiosInstance
+                        .post(`/news`, {
+                            referenceNewsId: referenceNewsId,
+                            receiverFsUserId: responseData.fsUserId,
+                            receiverDeviceId: responseData.deviceId,
+                            data: encryptedNewsData
+                        })
+                        .then(response => response.data)
+                });
             await Promise.all(createNewsPromises);
+
             setNewsData('');
             setKcal(0);
             setTime('00:00');

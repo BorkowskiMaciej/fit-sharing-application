@@ -16,7 +16,9 @@ const NewsList: React.FC<NewsListProps> = ({ url, refreshKey }) => {
 
     const fetchNews = async () => {
         try {
-            const receivedNews = await axiosInstance.get<News[]>(url).then(response => response.data);
+            const receivedNews = await axiosInstance
+                .get(url)
+                .then(response => response.data);
             const privateKey = await getPrivateKey(tokenData?.fsUserId);
             if (privateKey) {
                 const decryptedNews = await decryptNews(receivedNews, privateKey);

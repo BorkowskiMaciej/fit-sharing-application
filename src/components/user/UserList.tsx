@@ -11,8 +11,9 @@ const UserList = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axiosInstance.get(`/users/search?searchTerm=${query}`);
-                setUsers(response.data);
+                await axiosInstance
+                    .get(`/users/search?searchTerm=${query}`)
+                    .then(response => setUsers(response.data));
             } catch (error) {
                 console.error('Error fetching users', error);
             }

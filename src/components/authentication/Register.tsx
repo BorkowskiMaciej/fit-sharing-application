@@ -4,31 +4,8 @@ import {Link, useNavigate} from 'react-router-dom';
 import {AxiosError} from "axios";
 import {exportPublicKey, generateKeyPair, savePrivateKey} from "../../utils/cryptoUtils";
 import AvatarEditor from "react-avatar-editor";
-import {useDropzone} from "react-dropzone";
 import {generateDeviceId, saveDeviceId} from "../../utils/loginUtils";
-
-type RegisterCredentials = {
-    username: string;
-    password: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: Date;
-    gender: string;
-    description: string;
-    publicKey: string;
-    profilePicture?: string;
-    deviceId: string;
-};
-
-async function registerUser(credentials: RegisterCredentials) {
-    try {
-        return await axiosInstance.post('/auth/register', credentials);
-    } catch (error: any) {
-        console.error('Error during registration:', error.message);
-        throw error;
-    }
-}
+import {useAvatarUploader} from "../../hooks/useAvatarUploader";
 
 export default function Register() {
     const [username, setUserName] = useState("");
@@ -48,10 +25,28 @@ export default function Register() {
     const [descriptionError, setDescriptionError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [scale, setScale] = useState(1);
     const editorRef = useRef<AvatarEditor | null>(null);
     const navigate = useNavigate();
+    const { selectedImage, setSelectedImage, getAvatarAsBase64, getRootProps, getInputProps } = useAvatarUploader();
+
+    const handleRegisterError = (error: unknown) => {
+        if (error instanceof AxiosError && error.response?.data) {
+            switch (error.response.data.code) {
+                case "SERVICE-1002":
+                    setUsernameError(error.response.data.message)
+                    break;
+                case "SERVICE-1003":
+                    setEmailError(error.response.data.message)
+                    break;
+                default:
+                    setMessage(error.response.data.message || 'Registration failed. Please try again.');
+            }
+        }
+        else {
+            setMessage('An unexpected error occurred. Please try again later.');
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -111,67 +106,29 @@ export default function Register() {
             const deviceId = generateDeviceId();
             const profilePictureBase64 = editorRef.current ? await getAvatarAsBase64(editorRef.current) : null;
 
-            const response = await registerUser({
-                username: username || '',
-                password: password || '',
-                email: email || '',
-                firstName: firstName || '',
-                lastName: lastName || '',
-                dateOfBirth: new Date(dateOfBirth) || new Date(),
-                gender: gender || 'male',
-                description: description || '',
-                publicKey: publicKey || '',
-                profilePicture: profilePictureBase64 || undefined,
-                deviceId: deviceId
-            });
-            if (response.status === 201) {
-                await savePrivateKey(keyPair.privateKey, response.data.fsUserId);
-                await saveDeviceId(deviceId, response.data.fsUserId);
-                navigate('/login', { state: { message: 'Successfully registered. Please log in.' } });
-            } else {
-                throw new Error(`Unexpected response status: ${response.status}`);
-            }
+            await axiosInstance
+                .post('/auth/register', {
+                    username: username,
+                    password: password,
+                    email: email,
+                    firstName: firstName,
+                    lastName: lastName,
+                    dateOfBirth: new Date(dateOfBirth),
+                    gender: gender,
+                    description: description,
+                    publicKey: publicKey,
+                    profilePicture: profilePictureBase64,
+                    deviceId: deviceId,
+                })
+                .then(response => {
+                    savePrivateKey(keyPair.privateKey, response.data.fsUserId);
+                    saveDeviceId(deviceId, response.data.fsUserId);
+                    navigate('/login', {state: {message: 'Successfully registered. Please log in.'}});
+                });
         } catch (error) {
-            console.error('Registration failed:', error);
-            if (error instanceof AxiosError) {
-                if (error.response && error.response.data) {
-                    switch (error.response.data.code) {
-                        case "SERVICE-1002":
-                            setUsernameError(error.response.data.message)
-                            break;
-                        case "SERVICE-1003":
-                            setEmailError(error.response.data.message)
-                            break;
-                        default:
-                            setMessage(error.response.data.message || 'Registration failed. Please try again.');
-                    }
-                }
-            }
+            handleRegisterError(error);
         }
     };
-
-    const getAvatarAsBase64 = (editor: AvatarEditor): Promise<string | null> => {
-        return new Promise((resolve, reject) => {
-            if (editor) {
-                const canvas = editor.getImageScaledToCanvas();
-                const base64Image = canvas.toDataURL();
-                resolve(base64Image);
-            } else {
-                reject(new Error('Editor is not initialized.'));
-            }
-        });
-    };
-
-    const { getRootProps, getInputProps } = useDropzone({
-        accept: {
-            'image/*': ['.jpeg', '.jpg', '.png']
-        },
-        onDrop: (acceptedFiles: File[]) => {
-            if (acceptedFiles && acceptedFiles.length > 0) {
-                setSelectedImage(acceptedFiles[0]);
-            }
-        },
-    });
 
     return (
         <>
@@ -276,7 +233,7 @@ export default function Register() {
                                 Female
                             </label>
                             <label>
-                                <input type="radio" name="gender" value="OTHER" onChange={e => setGender(e.target.value)} />
+                                <input type="radio" name="gender" value="OTHER" onChange={e => setGender(e.target.value)} checked={gender === "OTHER"}/>
                                 Other
                             </label>
                         </div>

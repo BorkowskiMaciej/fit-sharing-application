@@ -1,13 +1,11 @@
 import React from 'react';
 import SearchBar from './SearchBar';
 import {useNavigate} from "react-router-dom";
-import GlobalMessages from "../GlobalMessage";
 import {useAuth} from "../../provider/authProvider";
 import '../../styles/navbar-styles.css';
 
 const NavBar: React.FC = () => {
     const { setTokenData } = useAuth();
-
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -17,7 +15,6 @@ const NavBar: React.FC = () => {
 
     return (
         <div className="navbar">
-            <GlobalMessages />
             <div className="navbar-section">
                 <h2 className="navbar-title">Fit Sharing</h2>
                 <div className="icon-container" onClick={() => navigate("/")}>
