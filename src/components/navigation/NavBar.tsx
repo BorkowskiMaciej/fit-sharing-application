@@ -2,19 +2,21 @@ import React from 'react';
 import SearchBar from './SearchBar';
 import {useNavigate} from "react-router-dom";
 import GlobalMessages from "../GlobalMessage";
-import {UserToken} from "../../types";
+import {useAuth} from "../../provider/authProvider";
 import '../../styles/navbar-styles.css';
 
-const NavBar: React.FC<{ setTokenData: (token: UserToken | null) => void }> = ({ setTokenData }) => {
+const NavBar: React.FC = () => {
+    const { setTokenData } = useAuth();
 
     const navigate = useNavigate();
 
     const handleLogout = () => {
         setTokenData(null);
+        navigate("/login");
     };
 
     return (
-        <>
+        <div className="navbar">
             <GlobalMessages />
             <div className="navbar-section">
                 <h2 className="navbar-title">Fit Sharing</h2>
@@ -46,7 +48,7 @@ const NavBar: React.FC<{ setTokenData: (token: UserToken | null) => void }> = ({
                     <span>Logout</span>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

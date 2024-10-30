@@ -6,6 +6,7 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import {AxiosError} from "axios";
 import {generateDeviceId, getDeviceId, saveDeviceId} from "../../utils/loginUtils";
 import {exportPublicKey, generateKeyPair, savePrivateKey} from "../../utils/cryptoUtils";
+import {useAuth} from "../../provider/authProvider";
 
 type LoginCredentials = {
     username: string;
@@ -21,16 +22,13 @@ async function loginUser(credentials: LoginCredentials) {
     }
 }
 
-type LoginProps = {
-    setToken: (data: { fsUserId: string, token: string; expiresIn: number }) => void;
-};
-
-export default function Login({ setToken }: LoginProps) {
+export default function Login() {
     const [username, setUserName] = useState<string | undefined>();
     const [password, setPassword] = useState<string | undefined>();
     const [message, setMessage] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string>('');
     const navigate = useNavigate();
+    const { setTokenData } = useAuth();
 
     const location = useLocation();
     const locationMessage = location.state?.message;
@@ -52,7 +50,7 @@ export default function Login({ setToken }: LoginProps) {
                 password: password || '',
             });
             if (response.status === 200) {
-                setToken({ fsUserId: response.data.fsUserId, token: response.data.token, expiresIn: response.data.expiresIn });
+                setTokenData({ fsUserId: response.data.fsUserId, token: response.data.token, expiresIn: response.data.expiresIn });
             } else {
                 throw new Error(`Unexpected response status: ${response.status}`);
             }

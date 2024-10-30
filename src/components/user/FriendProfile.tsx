@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useParams} from 'react-router-dom';
-import useToken from "../../hooks/useToken";
+import {useAuth} from "../../provider/authProvider";
 import NewsList from "../news/NewsList";
 import {useRelationship} from "../../hooks/useRelationship";
 import {useFetchUser} from "../../hooks/useFetchUser";
@@ -11,7 +11,7 @@ const FriendProfile: React.FC = () => {
     const { uuid } = useParams<{ uuid: string }>();
     const [showActions, setShowActions] = useState(false);
     const { user, error } = useFetchUser(uuid);
-    const { tokenData } = useToken();
+    const { tokenData } = useAuth();
     const authorizedFsUserId = tokenData?.fsUserId;
 
     const {

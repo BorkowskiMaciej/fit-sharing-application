@@ -1,6 +1,6 @@
 import React from "react";
 import {useNavigate} from "react-router-dom";
-import useToken from "../../hooks/useToken";
+import {useAuth} from "../../provider/authProvider";
 import {useRelationship} from "../../hooks/useRelationship";
 import '../../styles/user-card-styles.css';
 
@@ -15,7 +15,7 @@ interface UserCardProps {
 const UserCard: React.FC<UserCardProps> = ({ username, firstName, lastName, fsUserId, profilePicture}) => {
     const navigate = useNavigate();
     const defaultPhoto = '/user-photo.jpg';
-    const { tokenData } = useToken();
+    const { tokenData } = useAuth();
     const authorizedFsUserId = tokenData?.fsUserId;
 
     const {

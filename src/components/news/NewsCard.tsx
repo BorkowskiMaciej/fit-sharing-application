@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { News } from '../../types';
 import axiosInstance from "../../configuration/axiosConfig";
-import useToken from "../../hooks/useToken";
+import {useAuth} from "../../provider/authProvider";
 import moment from 'moment';
 import {useNavigate} from "react-router-dom";
 import '../../styles/news-card-styles.css';
@@ -28,7 +28,7 @@ const parseNewsData = (data: string) => {
 };
 
 const NewsCard: React.FC<NewsCardProps> = ({ news, onDelete }) => {
-    const { tokenData } = useToken();
+    const { tokenData } = useAuth();
     const { category, content, kcal, time, distance } = parseNewsData(news.data);
     const [showActions, setShowActions] = useState(false);
     const navigate = useNavigate();

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import NewsCard from './NewsCard';
 import {News} from "../../types";
-import useToken from "../../hooks/useToken";
+import {useAuth} from "../../provider/authProvider";
 import axiosInstance from "../../configuration/axiosConfig";
 import {decryptNews, getPrivateKey} from "../../utils/cryptoUtils";
 
@@ -12,7 +12,7 @@ interface NewsListProps {
 
 const NewsList: React.FC<NewsListProps> = ({ url, refreshKey }) => {
     const [newsList, setNewsList] = useState<News[]>([]);
-    const { tokenData } = useToken();
+    const { tokenData } = useAuth();
 
     const fetchNews = async () => {
         try {
