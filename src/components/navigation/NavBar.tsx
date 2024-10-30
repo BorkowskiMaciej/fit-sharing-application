@@ -1,7 +1,7 @@
 import React from 'react';
 import SearchBar from './SearchBar';
 import {useNavigate} from "react-router-dom";
-import GlobalMessages from "./GlobalMessage";
+import GlobalMessages from "../GlobalMessage";
 import {UserToken} from "../../types";
 import '../../styles/navbar-styles.css';
 

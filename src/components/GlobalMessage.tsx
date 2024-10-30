@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../../styles/global-message-styles.css';
+import '../styles/global-message-styles.css';
 
 interface MessageEventDetail {
     message: string;
