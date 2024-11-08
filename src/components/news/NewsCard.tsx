@@ -68,7 +68,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, onDelete }) => {
             <div className="news-details">
                 <p><strong>Time:</strong> {time}</p>
                 <p><strong>Kcal:</strong> {kcal}</p>
-                {distance > 0 && <p><strong>Distance:</strong> {distance} meters</p>}
+                {distance > 0 && <p><strong>Distance:</strong> {distance} km</p>}
             </div>
             {news.publisherFsUserId === tokenData?.fsUserId && (
                 <div className="action-container">
