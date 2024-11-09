@@ -100,12 +100,11 @@ export default function Login() {
                             onChange={e => setPassword(e.target.value)}
                         />
                     </label>
-                    <button type="submit" className='green-button' style={{ alignSelf: 'flex-end', width: '150px'}}>Log in</button>
+                    <button type="submit" className='green-button'>Log in</button>
                 </form>
-                <div>
-                    <Link to="/register">Need an account?</Link>
-                    <Link to="/reset-password">Forgot your password?</Link>
-                </div>
+                <Link to="/reset-password" className="forgot-password-link">Forgot your password?</Link>
+                <hr style={{ margin: "20px 0", border: "0.5px solid #dddfe2" }} />
+                <button onClick={() => navigate('/register')} className="return-button" style={{ display: 'block', width: '200px', margin: '0 auto'}}>Create new account</button>
             </div>
         </>
     );

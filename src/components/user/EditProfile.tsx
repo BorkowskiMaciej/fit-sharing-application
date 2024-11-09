@@ -222,7 +222,7 @@ const EditProfile: React.FC<{ setTokenData: (token: UserToken | null) => void }>
                         <button onClick={() => navigate("/me")} className='return-button'>Return</button>
                         <button type="submit" className='green-button'>Update profile</button>
                     </div>
-                    <button onClick={handleUserDelete} className='red-button'>Delete account</button>
+                    <button type="button" onClick={handleUserDelete} className='red-button'>Delete account</button>
                 </form>
             )}
         </div>

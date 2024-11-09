@@ -25,10 +25,11 @@ export default function Register() {
     const [descriptionError, setDescriptionError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
+    const [dateOfBirthError, setDateOfBirthError] = useState("");
     const [scale, setScale] = useState(1);
     const editorRef = useRef<AvatarEditor | null>(null);
     const navigate = useNavigate();
-    const { selectedImage, setSelectedImage, getAvatarAsBase64, getRootProps, getInputProps } = useAvatarUploader();
+    const { selectedImage, setSelectedImage, getAvatarAsBase64, getRootProps } = useAvatarUploader();
 
     const handleRegisterError = (error: unknown) => {
         if (error instanceof AxiosError && error.response?.data) {
@@ -100,6 +101,13 @@ export default function Register() {
             setDescriptionError("");
         }
 
+        if (new Date(dateOfBirth) > new Date()) {
+            setDateOfBirthError("Date of birth cannot be in the future.");
+            return;
+        } else {
+            setDateOfBirthError("");
+        }
+
         try {
             const keyPair = await generateKeyPair();
             const publicKey = await exportPublicKey(keyPair.publicKey);
@@ -127,6 +135,13 @@ export default function Register() {
                 });
         } catch (error) {
             handleRegisterError(error);
+        }
+    };
+
+    const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            setSelectedImage(file);
         }
     };
 
@@ -218,7 +233,11 @@ export default function Register() {
                         <input
                             type="date"
                             required
-                            onChange={e => setDateOfBirth(e.target.value)} />
+                            onChange={e => setDateOfBirth(e.target.value)}
+                            style={{
+                                border: lastNameError ? '2px solid red' : '1px solid #ccc'
+                            }}/>
+                        {dateOfBirthError && <div className="alert alert-danger">{dateOfBirthError}</div>}
                     </label>
 
                     <label>
@@ -250,42 +269,46 @@ export default function Register() {
                                 cursor: 'pointer',
                             }}
                         >
-                            <input {...getInputProps()} />
+                            <input type="file" onChange={handleFileSelect} hidden={true}/>
                             {!selectedImage && <p>Drag and drop an image here, or click to select one.</p>}
                             {selectedImage && <p>Click to select a different image or drag another one.</p>}
                         </div>
                     </label>
-                    <label>
-                            {selectedImage && (
-                                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                                    <AvatarEditor
-                                        ref={editorRef}
-                                        image={selectedImage}
-                                        width={300}
-                                        height={300}
-                                        border={5}
-                                        borderRadius={150}
-                                        scale={scale}
-                                    />
-                                </div>
-                            )}
-                            {selectedImage && (
-                                <div style={{ textAlign: 'center', marginTop: '10px'}}>
-                                    <input
-                                        style={{marginRight: '10px'}}
-                                        type="range"
-                                        min="1"
-                                        max="3"
-                                        step="0.01"
-                                        value={scale}
-                                        onChange={(e) => setScale(parseFloat(e.target.value))}
-                                    />
-                                    <button type="button" className="delete-photo-button" onClick={() => {
-                                        setSelectedImage(null);
-                                    }}>Remove Image</button>
-                                </div>
-                            )}
-                    </label>
+
+                    {selectedImage && (
+                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                            <AvatarEditor
+                                ref={editorRef}
+                                image={selectedImage}
+                                width={300}
+                                height={300}
+                                border={5}
+                                borderRadius={150}
+                                scale={scale}
+                            />
+                        </div>
+                    )}
+
+                    {selectedImage && (
+                        <div style={{ textAlign: 'center', marginTop: '10px' }}>
+                            <input
+                                type="range"
+                                min="1"
+                                max="3"
+                                step="0.01"
+                                value={scale}
+                                onChange={(e) => setScale(parseFloat(e.target.value))}
+                                style={{ marginRight: '10px' }}
+                            />
+                            <button
+                                type="button"
+                                className="delete-photo-button"
+                                onClick={() => setSelectedImage(null)}
+                            >
+                                Remove Image
+                            </button>
+                        </div>
+                    )}
                     <label>
                         <p>Description</p>
                         <textarea
@@ -295,10 +318,10 @@ export default function Register() {
                             }}/>
                         {descriptionError && <div className="alert alert-danger">{descriptionError}</div>}
                     </label>
-                    <button type="submit" className='green-button' style={{ alignSelf: 'flex-end', width: '150px'}}>Register</button>
+                    <button type="submit" className='green-button'>Register</button>
                 </form>
                 <div>
-                    <Link to="/login">Already have an account?</Link>
+                    <Link to="/login" className="forgot-password-link">Already have an account?</Link>
                 </div>
             </div>
         </>
