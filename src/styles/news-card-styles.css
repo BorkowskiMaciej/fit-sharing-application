@@ -75,3 +75,46 @@
     font-weight: bold;
     color: #58b700;
 }
+
+.like-button {
+    padding: 10px 20px;
+    font-size: 12px;
+    background-color: transparent;
+    border: 2px solid #ffffff;
+    color: white;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.like-button.liked {
+    border: 2px solid #FF69B4;
+    color: #FF69B4;
+}
+
+.like-button:hover {
+    border: 2px solid #FF69B4;
+    color: #FF69B4;
+
+}
+
+.news-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.likes-counter {
+    padding: 10px 20px;
+    font-size: 12px;
+    background-color: transparent;
+    border: 2px solid #ffffff;
+    color: white;
+    border-radius: 15px;
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+}

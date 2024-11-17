@@ -29,13 +29,8 @@ export interface News {
     receiverFsUserId: string;
     data: string;
     createdAt: string;
-}
-
-export interface CreateNewsRequest {
-    referenceNewsId: string;
-    receiverFsUserId: string;
-    data: string;
-    receiverDeviceId: string;
+    isLiked: boolean;
+    likes: number;
 }
 
 export interface UserToken {
