@@ -1,0 +1,156 @@
+.user-profile-container {
+    height: 80vh;
+    width: 30%;
+    padding: 20px;
+    margin-left: 10px;
+    position: sticky;
+    top: 20px;
+}
+
+.user-info {
+    border-radius: 10px;
+    padding: 15px;
+    background-color: #1f1f1f;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+    height: 100%;
+}
+
+.user-photo {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto;
+    display: block;
+}
+
+.user-container {
+    display: flex;
+    margin-top: 20px;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+    padding: 20px;
+}
+
+.user-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+}
+
+.news-section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.edit-profile-icons {
+    position: absolute;
+    right: 30px;
+    bottom: 30px;
+    display: flex;
+    flex-direction: row;
+}
+
+.dashboard-container {
+    margin-top: 20px;
+    background-color: #1f1f1f;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.filter-container {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.filter-container select {
+    padding: 8px;
+    border-radius: 4px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    outline: none;
+}
+
+.chart-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.chart-container {
+    flex: 1;
+    min-width: 300px;
+    max-width: 600px;
+}
+
+.statistics-container {
+    margin-top: 20px;
+    background-color: #1f1f1f;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 10px;
+    width: 20%;
+}
+
+.stat-box {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.stat-title {
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.user-name-container {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.user-username {
+    font-size: 20px;
+    font-weight: bold;
+    color: #58b700;
+    text-transform: lowercase;
+    margin: 5px 0;
+}
+
+.user-full-name {
+    font-size: 18px;
+    font-weight: 500;
+    color: #ffffff;
+    margin: 5px 0;
+}
+
+.user-details {
+    font-size: 14px;
+    color: #cccccc;
+    line-height: 1.6;
+    margin-top: 15px;
+}

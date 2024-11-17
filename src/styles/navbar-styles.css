@@ -1,0 +1,42 @@
+.navbar {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 90px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    background-color: #000000;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.navbar-section {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-title {
+    margin-right: 20px;
+}
+
+.navbar-link {
+    padding: 10px 15px;
+    color: white;
+    background-color: green;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+.navbar h1 {
+    color: #ffffff;
+}
+
+.navbar svg {
+    width: 40px;
+    height: 40px;
+}

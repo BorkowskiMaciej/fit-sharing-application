@@ -1,0 +1,324 @@
+/* Main content, general */
+html, body {
+    font-family: 'Lato', sans-serif;
+    color: #ffffff;
+    background-color: #121212;
+    overflow-x: hidden;
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    position: relative;
+    padding-top: 90px;
+    background-color: #121212;
+}
+
+.main-content {
+    overflow-y: auto;
+    position: absolute;
+    top: 90px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.main-component {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.list-container {
+    max-width: 100%;
+    width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #242424;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+    text-align: center;
+    color: #ffffff;
+}
+
+h2 {
+    font-size: 32px;
+    margin: 0;
+    text-align: center;
+    color: #58b700;
+}
+
+h3 {
+    font-size: 22px;
+    margin: 0;
+    text-align: center;
+    color: #ffffff;
+}
+
+p {
+    margin: 5px 0;
+    color: #d5d5d5;
+}
+
+.error {
+    color: red;
+    text-align: center;
+}
+
+
+/* Icons */
+svg {
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    width: 30px;
+    height: 30px;
+}
+
+svg:hover {
+    transform: scale(1.2);
+}
+
+.icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.icon-container span {
+    font-size: 12px;
+    color: #fff;
+}
+
+.icon {
+    margin-bottom: 5px;
+}
+
+
+/* Forms */
+.form-wrapper {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+}
+
+.form-wrapper h1 {
+    text-align: center;
+    color: #333;
+}
+
+.form-wrapper form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-wrapper label {
+    margin-bottom: 10px;
+}
+
+.form-wrapper label p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.form-wrapper input[type="text"],
+.form-wrapper input[type="password"],
+.form-wrapper input[type="email"],
+.form-wrapper input[type="number"],
+.form-wrapper textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-wrapper input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-wrapper .gender-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #666;
+}
+
+.form-wrapper .gender-container label {
+    margin-right: 10px;
+}
+.form-wrapper .gender-container input {
+    margin-right: 5px;
+}
+
+.form-wrapper button {
+    color: #ffffff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+
+.form-wrapper .forgot-password-link {
+    color: #666;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 15px;
+    text-decoration: none;
+}
+
+.form-wrapper .forgot-password-link:hover {
+    text-decoration: underline;
+}
+
+.form-wrapper .register-button {
+    background-color: #58b700;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.form-wrapper a {
+    color: #58b700;
+    text-align: center;
+    display: block;
+    margin-top: 20px;
+}
+
+.form-wrapper .alert {
+    margin-top: 10px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.input-error {
+    border: 2px solid red;
+}
+
+
+/* Buttons */
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.button-container button {
+    flex-grow: 1;
+    width: 150px;
+}
+
+.relationship-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.invite-button {
+    background-color: #0080ff;
+}
+
+.invite-button:hover {
+    background-color: #00478d;
+}
+
+.green-button {
+    background-color: #58b700;
+}
+
+.green-button:hover {
+    background-color: #007000;
+}
+
+.red-button {
+    background-color: #ff2511;
+}
+
+.red-button:hover {
+    background-color: #940f00;
+}
+
+.return-button {
+    background-color: #a8a8a8;
+    margin-right: 5px;
+}
+
+.return-button:hover {
+    background-color: #737373;
+}
+
+.delete-photo-button {
+    background-color: #737373;
+}
+
+.delete-photo-button:hover {
+    color: white;
+    background-color: #ff2511;
+}
+
+
+/* Actions */
+.action-container {
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    z-index: 1;
+}
+
+.actions-list {
+    position: absolute;
+    top: 0;
+    width: 190px;
+    right: 40px;
+    background-color: #333;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+}
+
+.actions-list li {
+    padding: 5px 10px;
+    background-color: #333;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #FFF;
+}
+
+.actions-list li:hover {
+    background-color: #444;
+}
