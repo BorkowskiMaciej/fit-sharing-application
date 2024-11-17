@@ -5,6 +5,7 @@ import NewsList from "../news/NewsList";
 import {useFetchUser} from "../../hooks/useFetchUser";
 import UserProfileInfo from "./UserProfileInfo";
 import '../../styles/user-profile-styles.css';
+import UserDashboard from "./UserDashboard";
 
 const MyProfile: React.FC = () => {
     const { user, error } = useFetchUser();
@@ -37,6 +38,7 @@ const MyProfile: React.FC = () => {
         <div className="user-container">
             <UserProfileInfo user={user} actions={actions}/>
             <div className="news-section">
+                <UserDashboard url="/news/reference" refreshKey={refreshKey} />
                 <CreateNewsComponent onSubmit={handleRefresh} />
                 <NewsList url="/news/reference" refreshKey={refreshKey} />
             </div>

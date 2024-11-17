@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import {SportCategory} from '../../types';
+import React, { useState } from 'react';
+import { SportCategory } from '../../types';
 import axiosInstance from "../../configuration/axiosConfig";
-import {encryptData, importPublicKey} from "../../utils/cryptoUtils";
+import { encryptData, importPublicKey } from "../../utils/cryptoUtils";
 import '../../styles/create-news-styles.css';
 
 interface CreateNewsComponentProps {
@@ -14,22 +14,34 @@ interface responseData {
     deviceId: string;
 }
 
-const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({onSubmit}) => {
+const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({ onSubmit }) => {
     const [newsData, setNewsData] = useState<string>('');
     const [selectedCategory, setSelectedCategory] = useState(SportCategory.RUNNING);
-    const [time, setTime] = useState<string>('00:00');
-    const [kcal, setKcal] = useState<number>(0);
-    const [distance, setDistance] = useState<number>(0);
+    const [time, setTime] = useState<string>('');
+    const [kcal, setKcal] = useState<number | null>(null);
+    const [distance, setDistance] = useState<number | null>(null);
+
+    const convertTimeToMinutes = (time: string): number => {
+        const [hours, minutes] = time.split(':').map(Number);
+        return hours * 60 + minutes;
+    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        if (!time || kcal === null) {
+            alert('Time and Kcal are required.');
+            return;
+        }
+
+        const minutes = convertTimeToMinutes(time);
+
         const data = JSON.stringify({
             category: selectedCategory,
             content: newsData,
-            kcal: kcal,
-            time: time,
-            distance: distance
+            kcal,
+            time: minutes,
+            distance: distance || 0,
         });
 
         try {
@@ -38,32 +50,30 @@ const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({onSubmit}) => 
 
             const referenceNewsId = await axiosInstance
                 .post('/news/reference', {
-                    data: encryptedReferenceNewsData
+                    data: encryptedReferenceNewsData,
                 })
-                .then(response => response.data.id);
+                .then((response) => response.data.id);
 
             const createNewsPromises = (
                 await axiosInstance
                     .get(`/relationships/friends`)
-                    .then(response => response.data)
-                ).map(async (responseData: responseData) => {
-                    const publicKey = await importPublicKey(responseData.publicKey);
-                    const encryptedNewsData = await encryptData(publicKey, data);
-                    return axiosInstance
-                        .post(`/news`, {
-                            referenceNewsId: referenceNewsId,
-                            receiverFsUserId: responseData.fsUserId,
-                            receiverDeviceId: responseData.deviceId,
-                            data: encryptedNewsData
-                        })
-                        .then(response => response.data)
+                    .then((response) => response.data)
+            ).map(async (responseData: responseData) => {
+                const publicKey = await importPublicKey(responseData.publicKey);
+                const encryptedNewsData = await encryptData(publicKey, data);
+                return axiosInstance.post(`/news`, {
+                    referenceNewsId: referenceNewsId,
+                    receiverFsUserId: responseData.fsUserId,
+                    receiverDeviceId: responseData.deviceId,
+                    data: encryptedNewsData,
                 });
+            });
             await Promise.all(createNewsPromises);
 
             setNewsData('');
-            setKcal(0);
-            setTime('00:00');
-            setDistance(0);
+            setKcal(null);
+            setTime('');
+            setDistance(null);
             onSubmit();
         } catch (error) {
             console.error('Failed to create news:', error);
@@ -81,13 +91,13 @@ const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({onSubmit}) => 
                             className="create-news-select"
                             value={selectedCategory}
                             onChange={(e) => setSelectedCategory(e.target.value as SportCategory)}>
-                            {Object.values(SportCategory).map(category => (
+                            {Object.values(SportCategory).map((category) => (
                                 <option key={category} value={category}>{category}</option>
                             ))}
                         </select>
                     </div>
                     <div className="input-wrapper">
-                        <label htmlFor="time-input">Time (HH:MM)</label>
+                        <label htmlFor="time-input">Time</label>
                         <input
                             type="text"
                             id="time-input"
@@ -95,6 +105,7 @@ const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({onSubmit}) => 
                             value={time}
                             onChange={(e) => setTime(e.target.value)}
                             pattern="^\d{2}:\d{2}$"
+                            placeholder="HH:MM"
                             required
                         />
                     </div>
@@ -104,23 +115,26 @@ const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({onSubmit}) => 
                             type="number"
                             id="kcal-input"
                             className="create-news-kcal"
-                            value={kcal}
+                            value={kcal ?? ''}
                             onChange={(e) => setKcal(Number(e.target.value))}
                             placeholder="Calories burned (kcal)"
                             min="0"
+                            max="9999"
                             required
                         />
                     </div>
                     {['RUNNING', 'WALKING', 'CYCLING'].includes(selectedCategory) && (
                         <div className="input-wrapper">
-                            <label htmlFor="distance-input">Distance (km)</label>
+                            <label htmlFor="distance-input">Distance</label>
                             <input
                                 type="number"
                                 id="distance-input"
                                 className="create-news-distance"
-                                value={distance}
+                                value={distance ?? ''}
                                 onChange={(e) => setDistance(Number(e.target.value))}
+                                placeholder="Distance in kilometers"
                                 min="0"
+                                max="9999"
                                 required
                             />
                         </div>
@@ -131,9 +145,10 @@ const CreateNewsComponent: React.FC<CreateNewsComponentProps> = ({onSubmit}) => 
                     value={newsData}
                     onChange={(e) => setNewsData(e.target.value)}
                     placeholder="Add some comment..."
-                    required
                 />
-                <button type="submit" className="submit-news-btn">Post</button>
+                <button type="submit" className="submit-news-btn">
+                    Post
+                </button>
             </form>
         </div>
     );

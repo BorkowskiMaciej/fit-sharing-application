@@ -40,7 +40,7 @@ const NewsList: React.FC<NewsListProps> = ({ url, refreshKey }) => {
     return (
         <div className="list-container">
             {newsList.length === 0 ? (
-                <p>No news found. Send new invitations!</p>
+                <p>No news found.</p>
             ) : (
                 newsList.map(news => (
                     <NewsCard key={news.id} news={news} onDelete={fetchNews} />

@@ -33,6 +33,12 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, onDelete }) => {
     const [showActions, setShowActions] = useState(false);
     const navigate = useNavigate();
 
+    const convertMinutesToTime = (totalMinutes: number): string => {
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    };
+
     const handleDelete = async () => {
         try {
             await axiosInstance
@@ -66,7 +72,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, onDelete }) => {
             </div>
             <p className="news-content">{content}</p>
             <div className="news-details">
-                <p><strong>Time:</strong> {time}</p>
+                <p><strong>Time:</strong> {convertMinutesToTime(time)}</p>
                 <p><strong>Kcal:</strong> {kcal}</p>
                 {distance > 0 && <p><strong>Distance:</strong> {distance} km</p>}
             </div>

@@ -6,12 +6,13 @@ import {useRelationship} from "../../hooks/useRelationship";
 import {useFetchUser} from "../../hooks/useFetchUser";
 import UserProfileInfo from "./UserProfileInfo";
 import '../../styles/user-profile-styles.css';
+import UserDashboard from "./UserDashboard";
 
 const FriendProfile: React.FC = () => {
-    const { uuid } = useParams<{ uuid: string }>();
+    const {uuid} = useParams<{ uuid: string }>();
     const [showActions, setShowActions] = useState(false);
-    const { user, error } = useFetchUser(uuid);
-    const { tokenData } = useAuth();
+    const {user, error} = useFetchUser(uuid);
+    const {tokenData} = useAuth();
     const authorizedFsUserId = tokenData?.fsUserId;
 
     const {
@@ -22,7 +23,7 @@ const FriendProfile: React.FC = () => {
         acceptInvitation,
         rejectInvitation,
         deleteRelationship,
-    } = useRelationship({fsUserId: uuid });
+    } = useRelationship({fsUserId: uuid});
 
     if (error) return <div className="error">{error}</div>;
     if (!user) return <div>Loading...</div>;
@@ -33,9 +34,9 @@ const FriendProfile: React.FC = () => {
                 <div className="remove-user-container">
                     <div onClick={() => setShowActions(!showActions)}>
                         <svg viewBox="0 0 24 6" fill="currentColor">
-                            <circle cx="3" cy="3" r="2.5" />
-                            <circle cx="12" cy="3" r="2.5" />
-                            <circle cx="21" cy="3" r="2.5" />
+                            <circle cx="3" cy="3" r="2.5"/>
+                            <circle cx="12" cy="3" r="2.5"/>
+                            <circle cx="21" cy="3" r="2.5"/>
                         </svg>
                     </div>
                     {showActions && (
@@ -66,10 +67,16 @@ const FriendProfile: React.FC = () => {
 
     return (
         <div className="user-container">
-            <UserProfileInfo user={user} actions={actions} />
-            <div className="news-section">
-                <NewsList url={`/news/received/${user.fsUserId}`} refreshKey={0} />
-            </div>
+            <UserProfileInfo user={user} actions={actions}/>
+            {relationshipStatus === 'ACCEPTED' ? (
+                <div className="news-section">
+                    <UserDashboard url={`/news/received/${user.fsUserId}`} refreshKey={0}/>
+                    <NewsList url={`/news/received/${user.fsUserId}`} refreshKey={0}/>
+                </div>
+            ) :
+                <div className='list-container'>
+                    <p>To display a user's activities the user must be your friend.</p>
+                </div>}
         </div>
     );
 };
