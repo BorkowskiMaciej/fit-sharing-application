@@ -71,7 +71,7 @@ const FriendProfile: React.FC = () => {
             {relationshipStatus === 'ACCEPTED' ? (
                 <div className="news-section">
                     <UserDashboard url={`/news/received/${user.fsUserId}`} refreshKey={0}/>
-                    <NewsList url={`/news/received/${user.fsUserId}`} refreshKey={0}/>
+                    <NewsList url={`/news/received/${user.fsUserId}`} refreshKey={0} onDelete={() => null}/>
                 </div>
             ) :
                 <div className='list-container'>

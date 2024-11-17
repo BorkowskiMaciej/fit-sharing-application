@@ -241,7 +241,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({url, refreshKey}) => {
                             </div>
                         )}
                     </>
-                ) : <p>No activity found to show.</p>}
+                ) : <p>No activity found to show. Post your first news!</p>}
             </div>
 
 
@@ -256,7 +256,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({url, refreshKey}) => {
                 </div>
                 <div className="stat-box">
                     <p className="stat-title">
-                        Average Kcal burned per day
+                        Average kcal burned per day
                     </p>
                     <p className="stat-value">
                         {averageKcalPerDay} kcal
@@ -264,7 +264,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({url, refreshKey}) => {
                 </div>
                 <div className="stat-box">
                     <p className="stat-title">
-                        Average time spent per day
+                        Average training time per day
                     </p>
                     <p className="stat-value">
                         {averageTimePerDay} hours

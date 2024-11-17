@@ -127,3 +127,30 @@
     font-weight: bold;
     color: #fff;
 }
+
+.user-name-container {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.user-username {
+    font-size: 20px;
+    font-weight: bold;
+    color: #58b700;
+    text-transform: lowercase;
+    margin: 5px 0;
+}
+
+.user-full-name {
+    font-size: 18px;
+    font-weight: 500;
+    color: #ffffff;
+    margin: 5px 0;
+}
+
+.user-details {
+    font-size: 14px;
+    color: #cccccc;
+    line-height: 1.6;
+    margin-top: 15px;
+}

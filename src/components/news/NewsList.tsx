@@ -8,9 +8,10 @@ import {decryptNews, getPrivateKey} from "../../utils/cryptoUtils";
 interface NewsListProps {
     url: string;
     refreshKey: number;
+    onDelete: () => void;
 }
 
-const NewsList: React.FC<NewsListProps> = ({ url, refreshKey }) => {
+const NewsList: React.FC<NewsListProps> = ({ url, refreshKey, onDelete }) => {
     const [newsList, setNewsList] = useState<News[]>([]);
     const { tokenData } = useAuth();
 
@@ -29,6 +30,7 @@ const NewsList: React.FC<NewsListProps> = ({ url, refreshKey }) => {
         } catch (error) {
             console.error('Failed to fetch news:', error);
         }
+        onDelete();
     };
 
     useEffect(() => {

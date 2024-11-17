@@ -40,7 +40,7 @@ const MyProfile: React.FC = () => {
             <div className="news-section">
                 <UserDashboard url="/news/reference" refreshKey={refreshKey} />
                 <CreateNewsComponent onSubmit={handleRefresh} />
-                <NewsList url="/news/reference" refreshKey={refreshKey} />
+                <NewsList url="/news/reference" refreshKey={refreshKey} onDelete={handleRefresh}/>
             </div>
         </div>
     );
