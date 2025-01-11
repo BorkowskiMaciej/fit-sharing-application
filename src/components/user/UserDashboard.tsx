@@ -248,16 +248,16 @@ const UserDashboard: React.FC<UserDashboardProps> = ({url, refreshKey}) => {
             <div className="dashboard-container" style={{ flex: 3 }}>
                 <div className="filter-container">
                     <Filter
-                        label="Select activity category:"
-                        value={selectedCategory}
-                        options={categories}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
-                    />
-                    <Filter
                         label="Select view type:"
                         value={viewType}
                         options={['Daily', 'Cumulative']}
                         onChange={(e) => setViewType(e.target.value)}
+                    />
+                    <Filter
+                        label="Select activity category:"
+                        value={selectedCategory}
+                        options={categories}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
                     />
                     <Filter
                         label="Select year:"
